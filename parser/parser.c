@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/01/26 19:11:30 by desausag         ###   ########.fr       */
+/*   Updated: 2021/01/27 15:20:58 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,50 +14,69 @@
 #include "../libft/libft.h"
 #include "gnl/get_next_line.h"
 
-//int read_map(int  fd, char **line)
-//{
-//	char buf[501];
-//	char *tmp;
-//	int count;
-//	int len;
-//
-//	len = 0;
-//	if ((read(fd, NULL, 0) == -1) || !line)
-//		return (-1);
-//	*line = ft_strdup("");
-//	while ((count = read(fd, buf, 500)))
-//	{
-//		buf[count] = '\0';
-//		len += count;
-//		tmp = *line;
-//		*line = ft_strjoin(tmp, buf);
-//		free(tmp);
-//	}
-//	return (len);
-//}
-//char	*get_next_line(char **line)
-//{
-//	char *ptr;
-//	char *tmp;
-//
-//	ptr = NULL;
-//	if ((ptr = ft_strchr(*line,'\n')))
-//	{
-//		*ptr = '\0';
-//
-//	}
-//	*ptr = '\0';
-//	ptr = *line;
-//	*line = ft_strdup(*line);
-//	free(ptr);
-//	return
-//
-//}
-
-t_textures parse_line(char *line)
+void 	get_num_fromline(t_textures *textures, char **line)
 {
-	t_textures textures;
+	*line = *line + 2;
+	textures->width = ft_atoi(*line);
+	while (**line >= '0' && **line <= '9')
+		(*line)++;
+	textures->height = ft_atoi(*line);
+}
 
+void 	get_char_fromline(t_textures *textures, char **line, char **texture)
+{
+	while (**line != '.' && (**line) + 1 != '/')
+		(*line)++;
+	*texture = ft_strdup(*line);
+}
+
+int		create_trgb(int t,int r, int g, int b)
+{
+	return(t << 24 | r << 16 | g << 8 | b);
+}
+
+void	get_color_fromline(char **line, int **n)
+{
+	int r;
+	int g;
+	int b;
+	unsigned long i;
+
+	*line = *line + 2;
+	r = ft_atoi(*line);
+	while (**line >= '0' && **line <= '9')
+		(*line)++;
+	(*line)++;
+	g = ft_atoi(*line);
+	while (**line >= '0' && **line <= '9')
+		(*line)++;
+	(*line)++;
+	b = ft_atoi(*line);
+	i = create_trgb(0, r, g, b);
+	*n = ft_itoa_uhex(i);
+
+}
+
+
+void parse_line(char *line, t_textures *textures)
+{
+
+	if (!(ft_strncmp(line, "R ", 2)))
+		get_num_fromline(textures, &line);
+	else if (!(ft_strncmp(line, "NO", 2)))
+		get_char_fromline(textures, &line, &(textures->no));
+	else if (!(ft_strncmp(line, "SO", 2)))
+			get_char_fromline(textures, &line, &(textures->so));
+	else if (!(ft_strncmp(line, "WE", 2)))
+			get_char_fromline(textures, &line, &(textures->we));
+	else if (!(ft_strncmp(line, "EA", 2)))
+			get_char_fromline(textures, &line, &(textures->ea));
+	else if (!(ft_strncmp(line, "S ", 2)))
+			get_char_fromline(textures, &line, &(textures->s));
+	else if (!(ft_strncmp(line, "F ", 2)))
+			get_color_fromline(&line, &(textures->f));
+	else if (!(ft_strncmp(line, "C ", 2)))
+			get_color_fromline(&line, &(textures->c));
 
 }
 int main(int argc, char **argv)
@@ -72,8 +91,7 @@ int main(int argc, char **argv)
 	while (len)
 	{
 		len = get_next_line(fd, &line);
-		//textures = parse_line(line);
-		printf("%s\n", line);
+		parse_line(line, &textures);
 		free(line);
 	}
 //	len = read_map(fd, &line);
