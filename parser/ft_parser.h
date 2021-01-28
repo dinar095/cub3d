@@ -27,8 +27,8 @@ typedef struct s_textures
 	char	*we;
 	char	*ea;
 	char	*s;
-	char	*f;
-	char	*c;
+	int 	f;
+	int 	c;
 	char	**map;
 }				t_textures;
 #endif

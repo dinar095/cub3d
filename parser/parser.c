@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/01/27 19:37:01 by desausag         ###   ########.fr       */
+/*   Updated: 2021/01/28 15:36:23 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,9 @@ void	reset_textures(t_textures *textures)
 	textures->we = NULL;
 	textures->ea = NULL;
 	textures->s = NULL;
-	textures->f = NULL;
-	textures->c = NULL;
-	textures->map = (char **)malloc(sizeof(char *) + sizeof(char *));
-	textures->map = "e";
-//	printf("%s\n", (textures->map) + 1);
+	textures->f = -1;
+	textures->c = -1;
+	textures->map = NULL;
 }
 void 	get_num_fromline(t_textures *textures, char **line)
 {
@@ -49,12 +47,11 @@ int		create_trgb(int t,int r, int g, int b)
 	return(t << 24 | r << 16 | g << 8 | b);
 }
 
-void	get_color_fromline(char **line, int **n)
+void	get_color_fromline(char **line, int *n)
 {
 	int r;
 	int g;
 	int b;
-	unsigned long i;
 
 	*line = *line + 2;
 	r = ft_atoi(*line);
@@ -66,8 +63,8 @@ void	get_color_fromline(char **line, int **n)
 		(*line)++;
 	(*line)++;
 	b = ft_atoi(*line);
-	i = create_trgb(0, r, g, b);
-	*n = ft_itoa_uhex(i);
+	*n = create_trgb(0, r, g, b);
+
 
 }
 int 	check_header(t_textures *textures)
@@ -75,13 +72,15 @@ int 	check_header(t_textures *textures)
 	int i;
 
 	i = 0;
-	if (textures->width >= 0 && textures->height >= 0)
+	if (textures->width > 0 && textures->height > 0)
+		i++;
+	if (textures->f > -1 && textures->c > -1)
 		i++;
 	if (textures->no && textures->so && textures->we && textures->ea)
 		i++;
-	if (textures->s && textures->f && textures->c)
+	if (textures->s)
 		i++;
-	return (i == 3 ? 1 : 0);
+	return (i == 4 ? 1 : 0);
 }
 char	**map_join(char ***map, char **line)
 {
@@ -93,18 +92,32 @@ char	**map_join(char ***map, char **line)
 	n = 0;
 //	if (!map || !line)
 //		return (NULL);
-	while (*map + i)
-		i++;
-	ret = (char **)malloc((sizeof(char *)) * i + sizeof(char *)*2);// выделилил память под 1 строку
-	if (!ret)
-		return (NULL);
-	while (n <= i)//скопировать указатели строк в новое место
+//	if (*map == NULL)
+//	{
+//		*map = (char **)malloc(sizeof(char *) + sizeof(char *));
+//		*map = ft_strdup(*line);
+//		*(map + 1) = NULL;
+//		printf("%s\n", **map);
+//	}
+	if (*map == NULL)
 	{
-		*(ret + n) = *(map + n);
+		ret = (char **)malloc(sizeof(char *) + sizeof(char *));
+		*ret = ft_strdup(*line);
+		*(ret + 1) = NULL;
+		return (ret);
+	}
+	while (*(*map + i) != NULL)
+		i++;
+	ret = (char **)malloc(sizeof(char *) * (i + 2));// выделилил память под 1 строку
+	while (n < i)//скопировать указатели строк в новое место
+	{
+		*(ret + n) = *(*map + n);
 		n++;
 	}
 	ret[n++] = ft_strdup(*line);
-	ret[n] = '\0';
+	ret[n] = NULL;
+	free(*map);
+	printf("%s\n", ret[n-1]);
 	return (ret);
 }
 void get_map(t_textures *textures, char **line)
@@ -115,15 +128,9 @@ void get_map(t_textures *textures, char **line)
 	i = 0;
 	if (!(i = check_header(textures)))
 		return;
-	if (**line == '\n' || **line == '\0')
+	if (**line == '\n' || **line == '\0' || **line == '0')
 		return;
-	tmp = textures->map;
-	textures->map = map_join(&textures->map, &line);
-	//free(*tmp);
-	printf("%s\n", textures->map);
-
-
-
+	textures->map = map_join(&textures->map, line);
 }
 
 void parse_line(char *line, t_textures *textures)
@@ -163,9 +170,11 @@ int main(int argc, char **argv)
 		parse_line(line, &textures);
 		free(line);
 	}
-//	len = read_map(fd, &line);
-//	textures = read_line(line);
-//	//printf("%s\n", line);
+//	while (len < 50)
+//	{
+//		printf("%s\n", *(textures.map + len));
+//		len++;
+//	}
 
 
 }
