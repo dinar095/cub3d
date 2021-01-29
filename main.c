@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 	reset_textures(&textures);
 	len = 1;
 	fd = open(argv[1], O_RDONLY);
-	while (len)
+	while (len && fd != -1)
 	{
 		len = get_next_line(fd, &line);
 		parse_line(line, &textures);
