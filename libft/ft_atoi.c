@@ -14,16 +14,14 @@
 
 int		ft_atoi(const char *str)
 {
-	int i;
 	int minus;
 	int num;
 
-	i = 0;
 	minus = 1;
 	num = 0;
 	while (*str == '\t' || *str == '\n' || *str == '\v'
 	|| *str == '\f' || *str == ' ' || *str == '\r')
-		i++;
+		str++;
 	if (*str == '-')
 		minus = -1;
 	if (*str == '-' || *str == '+')

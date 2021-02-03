@@ -22,7 +22,7 @@ FUNCTIONS = ft_isalnum ft_isalpha ft_isdigit ft_isascii \
 				ft_substr ft_strjoin ft_strtrim ft_itoa \
 				ft_putchar_fd ft_putstr_fd ft_putendl_fd \
 				ft_putnbr_fd ft_strmapi ft_split ft_hex_itoa \
-				ft_uitoa ft_free
+				ft_uitoa
 
 
 BONUS = ft_lstnew ft_lstadd_front ft_lstsize ft_lstlast ft_lstadd_back \

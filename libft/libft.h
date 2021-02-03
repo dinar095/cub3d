@@ -92,6 +92,5 @@ char				*ft_itoa_uhex(long unsigned int n);
 
 char				*ft_uitoa(unsigned int n);
 
-int					ft_free(char **str);
 
 #endif
