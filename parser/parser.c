@@ -52,7 +52,7 @@ char 	**map_join(char ***map, char **line)
 	return (ret);
 }
 
-void	get_map(t_textures *textures, char **line)
+void	 get_map(t_textures *textures, char **line)
 {
 	if (!(check_header(textures)))
 		return;
@@ -65,7 +65,7 @@ void	parse_line(char *line, t_textures *textures)
 {
 
 	if (!(ft_strncmp(line, "R ", 2)))
-		get_num_fromline(textures, &line);
+  		get_num_fromline(textures, &line);
 	else if (!(ft_strncmp(line, "NO", 2)))
 		get_char_fromline(&line, &(textures->no));
 	else if (!(ft_strncmp(line, "SO", 2)))
