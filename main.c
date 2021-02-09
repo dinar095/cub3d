@@ -89,6 +89,42 @@ int	check_valid(t_textures textures)
 
 
 }
+typedef struct  s_data {
+	void        *img;
+	char        *addr;
+	int         bits_per_pixel;
+	int         line_length;
+	int         endian;
+}               t_data;
+
+void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
+{
+	char    *dst;
+
+	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	*(unsigned int*)dst = color;
+}
+
+void scale_pix(t_data *img, int scale, char **map)
+{
+	int x;
+	int y;
+
+	y = 0;
+	while (map[y])
+	{
+		x = 0;
+		while (map[y][x])
+		{
+			if (map[y][x] == '1')
+			{
+				my_mlx_pixel_put(img, x, y, 0x00FF0000);
+			}
+			x++;
+		}
+		y++;
+	}
+}
 int main(int argc, char **argv)
 {
 	int fd;
@@ -97,36 +133,37 @@ int main(int argc, char **argv)
 	t_textures textures;
 	reset_textures(&textures);
 	len = 1;
-	fd = open(argv[1], O_RDONLY);
+	if ((fd = open(argv[1], O_RDONLY)) == -1)
+	{
+		ft_putstr_fd("Eroor map.", 1);
+		return (0);
+	}
 	while (len && fd != -1)
 	{
 		len = get_next_line(fd, &line);
 		parse_line(line, &textures);
 		free(line);
 	}
-//	while (*(textures.map + len))
-//	{
-//		printf("%s\n", *(textures.map + len));
-//		len++;
-//	}
-	check_valid(textures);
-//	void *mlx = NULL;
-//	void *win = NULL;
-//	int x = 100;
-//	int y = 100;
-//
-//	mlx = mlx_init();
-//	win = mlx_new_window(mlx, 640, 480, "test");
-//	while (y++ < 200)
-//	{
-//		x = 100;
-//		while (x++ < 200)
-//		{
-//			mlx_pixel_put(mlx, win, x, y, 0xDC640A);
-//		}
-//	}
-//	mlx_loop(mlx);
-//	ft_putchar_fd('s', 1);
+	if (!(check_valid(textures)))
+		return (0);
+
+	void    *mlx;
+	void    *mlx_win;
+	t_data  img;
+
+	mlx = mlx_init();
+	mlx_win = mlx_new_window(mlx, 600, 600, "Hello world!");
+	img.img = mlx_new_image(mlx, 600, 600);
+	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
+								 &img.endian);
+	int x;
+	int y = 0;
+	char **map = textures.map;
+
+	scale_pix(&img, 16, map);
+	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
+	mlx_loop(mlx);
+	ft_putchar_fd('s', 1);
     close(fd);
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/01/28 17:50:44 by desausag         ###   ########.fr       */
+/*   Updated: 2021/02/09 14:09:01 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	 get_map(t_textures *textures, char **line)
 {
 	if (!(check_header(textures)))
 		return;
-	if (**line == '\n' || **line == '\0' || **line == '0')
+	if ((**line == '\n' || **line == '\0' || **line == '0') && textures->map == NULL)
 		return;
 	textures->map = map_join(&textures->map, line);
 }
