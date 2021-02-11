@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 99)
 
 file(GLOB LIBFILES libft/*.c)
 add_library(LibFT STATIC ${LIBFILES})
-add_executable(desausag main.c parser/parser.c parser/srcs/ft_header.c parser/gnl/get_next_line.c)
+add_executable(desausag main.c parser/parser.c parser/srcs/ft_header.c parser/gnl/get_next_line.c parser/check_map/check_valid.c)
 target_link_libraries(desausag LibFT)
 if (APPLE)
     target_link_libraries(desausag ${CMAKE_SOURCE_DIR}/minilibx/libmlx.a)

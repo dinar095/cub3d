@@ -32,13 +32,11 @@ typedef struct	s_textures
 	int		c;
 	char	**map;
 }				t_textures;
-void			reset_textures(t_textures *textures);
 void			get_num_fromline(t_textures *textures, char **line);
 void			get_char_fromline(char **line, char **texture);
 int				create_trgb(int t, int r, int g, int b);
 void			get_color_fromline(char **line, int *n);
 int				check_header(t_textures *textures);
-char			**map_join(char ***map, char **line);
-void			get_map(t_textures *textures, char **line);
-void			parse_line(char *line, t_textures *textures);
+int             check_valid(t_textures textures);
+int             open_file(char *file, t_textures *textures);
 #endif

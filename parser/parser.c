@@ -12,7 +12,7 @@
 
 #include "ft_parser.h"
 
-void	reset_textures(t_textures *textures)
+static void	reset_textures(t_textures *textures)
 {
 	textures->width = -1;
 	textures->height = -1;
@@ -26,7 +26,7 @@ void	reset_textures(t_textures *textures)
 	textures->map = NULL;
 }
 
-char 	**map_join(char ***map, char **line)
+static char 	**map_join(char ***map, char **line)
 {
 	char	**ret;
 	size_t	i;
@@ -52,7 +52,7 @@ char 	**map_join(char ***map, char **line)
 	return (ret);
 }
 
-void	 get_map(t_textures *textures, char **line)
+static void	 get_map(t_textures *textures, char **line)
 {
 	if (!(check_header(textures)))
 		return;
@@ -61,7 +61,7 @@ void	 get_map(t_textures *textures, char **line)
 	textures->map = map_join(&textures->map, line);
 }
 
-void	parse_line(char *line, t_textures *textures)
+static void	parse_line(char *line, t_textures *textures)
 {
 
 	if (!(ft_strncmp(line, "R ", 2)))
@@ -82,3 +82,27 @@ void	parse_line(char *line, t_textures *textures)
 			get_color_fromline(&line, &(textures->c));
 	get_map(textures, &line);
 }
+int open_file(char *file, t_textures *textures)
+{
+    int fd;
+    char *line;
+    int len;
+    reset_textures(textures);
+    len = 1;
+    if ((fd = open(file, O_RDONLY)) == -1)
+    {
+        ft_putstr_fd("Eroor map.", 1);
+        return (0);
+    }
+    while (len && fd != -1)
+    {
+        len = get_next_line(fd, &line);
+        parse_line(line, textures);
+        free(line);
+    }
+    close(fd);
+    if (!(check_valid(*textures)))
+        return (0);
+    return (1);
+}
+
