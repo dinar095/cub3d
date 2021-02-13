@@ -3,31 +3,28 @@
 #include "libft/libft.h"
 #include "parser/ft_parser.h"
 #include <math.h>
-#define SCALE 16
+#define SCALE 40
 typedef struct  s_data
 {
 	void        *img;
 	char        *addr;
-	int         bits_per_pixel;
-	int         line_length;
+	void        *mlx;
+	void        *mlx_win;
+	int         bpp;
+	int         line_l;
 	int         endian;
 }               t_data;
 
-typedef struct	s_win //структура для окна
+
+typedef struct s_chel
 {
-    void		*mlx;
-    void		*win;
-    void		*img;
-    void		*addr;
-    int			line_l;
-    int			bpp;
-    int			en;
-}				  t_win;
+    double x;
+    double y;
+}               t_cord;
 
 typedef struct	s_plr //структура для игрока и луча
 {
-    float		x;
-    float		y;
+   t_cord       pos;
     float		dir;
     float		start;
     float		end;
@@ -35,7 +32,7 @@ typedef struct	s_plr //структура для игрока и луча
 
 typedef struct	s_all // структура для всего вместе
 {
-    t_win		*win;
+    t_data		*win;
     t_plr		*plr;
     char		**map;
 }				  t_all;
@@ -44,11 +41,37 @@ void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char    *dst;
 
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	dst = data->addr + (y * data->line_l + x * (data->bpp / 8));
 	*(unsigned int*)dst = color;
 }
 
-void scale_pix(t_data *img, int scale, char **map)
+double ds_to_point(t_cord start, t_cord end)
+{
+    double xx = start.x - end.x;
+    double yy = start.y - end.y;
+    return sqrt(xx*xx + yy*yy);
+}
+
+int is_wall_cord(char **map,t_cord ray)
+{
+    if (map[(int) ray.y][(int) ray.x] != '1')
+        return 0;
+    else
+        return 1;
+}
+
+int is_wall_point(char **map,double x,double y)
+{
+    t_cord ray = {x, y};
+
+    if (map[(int) ray.y][(int) ray.x] != '1')
+        return 0;
+    else
+        return 1;
+}
+
+
+void scale_pix(t_data *img, char **map)
 {
 	int x;
 	int y;
@@ -56,55 +79,111 @@ void scale_pix(t_data *img, int scale, char **map)
     int j;
 
     y = -1;
-    while (map[++y])
-    {
+    while (map[++y]) {
         x = -1;
-        while (map[y][++x])
-            if (map[y][x] == '1')
-            {
+        while (map[y][++x]) {
+            if (map[y][x] == '1') {
                 i = 0;
-                while (i++ < scale)
-                {
-                    my_mlx_pixel_put(img, x * scale + i, y * scale, 0x00FF0000);
+                while (i++ < SCALE) {
+                    my_mlx_pixel_put(img, x * SCALE + i, y * SCALE, 0x505050);
                     j = 0;
-                    while (j++ < scale)
-                        my_mlx_pixel_put(img, x * scale + i, y * scale + j, 0x00FF0000);
+                    while (j++ < SCALE)
+                        my_mlx_pixel_put(img, x * SCALE + i, y * SCALE + j, 0x505050);
                 }
             }
+
+            if (map[y][x] == '0') {
+                i = 0;
+                while (i++ < SCALE) {
+                    my_mlx_pixel_put(img, x * SCALE + i, y * SCALE, 0x151515);
+                    j = 0;
+                    while (j++ < SCALE)
+                        my_mlx_pixel_put(img, x * SCALE + i, y * SCALE + j, 0x151515);
+                }
+            }
+        }
     }
 }
-void	ft_cast_ray(t_all *all)
+void    init_img(t_data *img, char **map)
 {
-    t_plr	ray = *all->plr; // задаем координаты луча равные координатам игрока
-
-    while (all->map[(int)(ray.y / SCALE)][(int)(ray.x / SCALE)] != '1')
-    {
-        ray.x += cos(ray.dir);
-        ray.y += sin(ray.dir);
-        mlx_pixel_put(all->mlx, all->win, ray.x, ray.y, 0x990099);
-    }
+    img->mlx = mlx_init();
+    img->mlx_win = mlx_new_window(img->mlx, 1300, 800, "Hello world!");
+    img->img= mlx_new_image(img->mlx, 1300, 800);
+    img->addr = mlx_get_data_addr(img->img, &(img->bpp),&(img->line_l),
+                                 &(img->endian));
+    scale_pix(img, map);
 }
 int main(int argc, char **argv)
 {
 	t_textures textures;
+    t_data  img;
 	if (!open_file(argv[1], &textures))
         return (0);
+    init_img(&img, textures.map);
 
-	void    *mlx;
-	void    *mlx_win;
-	t_data  img;
+    t_cord ray;
+    t_cord ray_prev;
+    t_cord cam;
 
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, 1920, 1080, "Hello world!");
-	img.img = mlx_new_image(mlx, 1920, 1080);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
-								 &img.endian);
-	char **map = textures.map;
-	scale_pix(&img, 40, map);
+    cam.x = 15.75;
+    cam.y = 10.3;
+    my_mlx_pixel_put(&img, cam.x * SCALE, cam.y * SCALE, 0xFFFF00);
+
+    ray.x = cam.x;
+    ray.y = cam.y;
+
+    ray_prev.x = ray.x;
+    ray_prev.y = ray.y;
+
+    double alpha = M_PI;//0.1
+    double c = 0.1;
+
+    double begin = alpha - M_PI;
+    double end = alpha + M_PI;
+    char **map = textures.map;
+    while (begin < end)
+    {
+        ray.x = cam.x;
+        ray.y = cam.y;
+        while (!(is_wall_cord(map, ray)))
+        {
 
 
 
-    mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
-	mlx_loop(mlx);
+            if ((ceil(ray.x) - ceil(ray_prev.x))>=1) // проверка по x
+            {
+                if ((is_wall_point(map,ray.x-1,ray.y))) {
+                    my_mlx_pixel_put(&img, ray.x * SCALE, ray.y * SCALE, 0xFF0000);
+                    break;
+                }
+            }
+
+            if ((ceil(ray.y) - ceil(ray_prev.y))>=1) // проверка по y
+            {
+                if ((is_wall_point(map,ray.x,ray.y-1))) {
+                    my_mlx_pixel_put(&img, ray.x * SCALE, ray.y * SCALE, 0xFF00FF);
+                    break;
+                }
+            }
+            my_mlx_pixel_put(&img, ray.x * SCALE, ray.y * SCALE, 0xCCCC00);
+
+            ray_prev.x = ray.x;
+            ray_prev.y = ray.y;
+            ray.x += c * cos(begin);
+            ray.y += c * sin(begin);
+
+        }
+        //my_mlx_pixel_put(&img, ray.x * SCALE, ray.y * SCALE, 0x00FFFF);
+
+
+
+
+        begin += 0.015;
+
+    }
+
+
+    mlx_put_image_to_window(img.mlx, img.mlx_win, img.img, 0, 0);
+	mlx_loop(img.mlx);
 	return 0;
 }
