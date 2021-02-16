@@ -25,7 +25,7 @@ typedef struct  s_data
 typedef struct	s_plr //структура для игрока и луча
 {
 	t_cord       pos;
-	float		dir;
+	double 		dir;
 	float		start;
 	float		end;
 }				  t_plr;

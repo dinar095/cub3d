@@ -1,7 +1,8 @@
 #include "./game/ft_game.h"
 #include "./parser/ft_parser.h"
 
-void wall_270_0()
+
+//
 
 void draw_screen(t_all *all)
 {
@@ -9,6 +10,7 @@ void draw_screen(t_all *all)
 	t_cord ray_prev;
 	int minus;
 	t_cord tmp;
+	float dir = all->plr->dir;
 
 
 
@@ -17,50 +19,43 @@ void draw_screen(t_all *all)
 	ray_prev.x = all->plr->pos.x;
 	ray_prev.y = all->plr->pos.y;
 
-	double alpha = M_PI;//0.1
-	double c = 0.5;
 
-	double begin = alpha - M_PI;
-	double end = alpha + M_PI;
+	float dbegin = dir - 1;
+	float end = dir + 3;
 
 	init_img(all->win);
 	scale_pix(all->win, map);
-	double ll = (floor(ray.y + 1) - ray.y);
-	while (begin < end)
+
+	while (dbegin < end)
 	{
-//		minus = 1;
-//		if (ray_prev.y - ray.y < 0 )
 		ray.x = all->plr->pos.x;
 		ray.y = all->plr->pos.y;
 
 		while (!(is_wall_cord(map, ray)))
 		{
 			int col = 0xFFFF00;
-//
 			my_mlx_pixel_put(all->win, ray.x * SCALE, ray.y * SCALE, col);
 
 			ray_prev.x = ray.x;
 			ray_prev.y = ray.y;
 
-			ray.x += c * cos(begin);
-			ray.y += c * sin(begin);
-			double k = (ray.y - ray_prev.y)/(ray.x - ray_prev.x);
-			if (k != 0)
-			{
-				double b = ray.y - (k *	ray.x);
-				ray.x = (floor(ray_prev.x + 1));
-				ray.y = k * ray.x + b;
-				tmp.y = floor(ray_prev.y + 1);
-				tmp.x = (tmp.y - b)/k;
-				if (ray.x - tmp.x >= 0)
-				{
-					ray.x = tmp.x;
-					ray.y = tmp.y;
-				}
-			}
+double k = ray.y - ray_prev.y;
+
+			ray.y = k * (floor(ray.x + 1) - ray_prev.x)/(ray.x - ray_prev.x) + ray_prev.y;
+			ray.x = floor(ray.x + 1);
+//				float b = ray.y - (dbegin *	ray.x);
+//				ray.x = (floor(ray_prev.x + 1));
+//				ray.y = dbegin * ray.x + b;
+//				tmp.y = floor(ray_prev.y + 1);
+//				tmp.x = (tmp.y - b)/dbegin;
+//				if (ray.x - tmp.x >= 0)
+//				{
+//					ray.x = tmp.x;
+//					ray.y = tmp.y;
+//				}
 		}
 
-		begin += 0.025;
+		dbegin += 0.01;
 	}
 	mlx_put_image_to_window(all->win->mlx, all->win->mlx_win, all->win->img, 0, 0);
 }
@@ -73,9 +68,9 @@ int             key_hook(int keycode, t_all *all)
 	if (keycode == 's')
 		all->plr->pos.y += 0.25;
 	if (keycode == 'a')
-		all->plr->pos.x -= 0.25;
+		all->plr->dir -= 0.25;
 	if (keycode == 'd')
-		all->plr->pos.x += 0.25;
+		all->plr->dir += 0.25;
 //	mlx_hook(all->win->mlx_win, 2, 1L<<0, key_hook, &all);
     draw_screen(all);
 
@@ -91,6 +86,7 @@ int main(int argc, char **argv) {
 
 	all.plr->pos.x = 15.75;
 	all.plr->pos.y = 10.75;
+	all.plr->dir = 1;
 
 	all.win = &img;
 
