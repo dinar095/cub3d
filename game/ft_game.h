@@ -25,7 +25,7 @@ typedef struct  s_data
 typedef struct	s_plr //структура для игрока и луча
 {
 	t_cord       pos;
-	double 		dir;
+	t_cord 		dir;
 	float		start;
 	float		end;
 }				  t_plr;
@@ -33,7 +33,7 @@ typedef struct	s_plr //структура для игрока и луча
 typedef struct	s_all // структура для всего вместе
 {
 	t_data		*win;
-	t_plr		*plr;
+	t_plr		plr;
 	char		**map;
 }				  t_all;
 int is_wall_cord(char **map,t_cord ray);

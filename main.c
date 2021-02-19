@@ -2,75 +2,77 @@
 #include "./parser/ft_parser.h"
 
 
-//
-
 void draw_screen(t_all *all)
 {
 	t_cord ray;
-	t_cord ray_prev;
+	t_cord prev;
 	int minus;
 	t_cord tmp;
-	float dir = all->plr->dir;
 
 
 
 	char **map = all->map;
 
-	ray_prev.x = all->plr->pos.x;
-	ray_prev.y = all->plr->pos.y;
 
-
-	float dbegin = dir - 1;
-	float end = dir + 3;
+	double begin = -M_PI/6;
+	double end = M_PI/6;
 
 	init_img(all->win);
 	scale_pix(all->win, map);
+	mlx_put_image_to_window(all->win->mlx, all->win->mlx_win, all->win->img, 0, 0);
 
-	while (dbegin < end)
+	while (begin < end)
 	{
-		ray.x = all->plr->pos.x;
-		ray.y = all->plr->pos.y;
+
+		ray.x = all->plr.pos.x;
+		ray.y = all->plr.pos.y;
+tmp = all->plr.dir;
+		all->plr.dir.x *= cos(begin);
+		all->plr.dir.y *= sin(begin);
 
 		while (!(is_wall_cord(map, ray)))
 		{
+			prev = ray;
 			int col = 0xFFFF00;
+
+//
 			my_mlx_pixel_put(all->win, ray.x * SCALE, ray.y * SCALE, col);
 
-			ray_prev.x = ray.x;
-			ray_prev.y = ray.y;
+			if (all->plr.dir.x == 1 && all->plr.dir.y == 0)//если луч кинут на право
+				ray.x++;
+			if (all->plr.dir.y == 1 && all->plr.dir.x == 0)//если луч кинут на лево
+				ray.y++;
+			else if (all->plr.dir.x > 0 && all->plr.dir.y > 0)//для iV части круга
+			{
+				ray.x = floor(ray.x + 1);//для иксов
+				ray.y = ((ray.x - prev.x) / all->plr.dir.y) * all->plr.dir.x + prev.x;
+				tmp.y = floor(ray.y + 1); //для игриков
+				tmp.x = ((ray.y - prev.y) / all->plr.dir.x) * all->plr.dir.y + prev.y;
+				if (tmp.x - ray.x < 0)
+					ray = tmp;
+			}
 
-double k = ray.y - ray_prev.y;
 
-			ray.y = k * (floor(ray.x + 1) - ray_prev.x)/(ray.x - ray_prev.x) + ray_prev.y;
-			ray.x = floor(ray.x + 1);
-//				float b = ray.y - (dbegin *	ray.x);
-//				ray.x = (floor(ray_prev.x + 1));
-//				ray.y = dbegin * ray.x + b;
-//				tmp.y = floor(ray_prev.y + 1);
-//				tmp.x = (tmp.y - b)/dbegin;
-//				if (ray.x - tmp.x >= 0)
-//				{
-//					ray.x = tmp.x;
-//					ray.y = tmp.y;
-//				}
 		}
 
-		dbegin += 0.01;
+
+		begin += 0.0025;
 	}
 	mlx_put_image_to_window(all->win->mlx, all->win->mlx_win, all->win->img, 0, 0);
 }
+
 
 int             key_hook(int keycode, t_all *all)
 {
     printf("Keycode: %C\n", keycode);
     if (keycode == 'w')
-    	all->plr->pos.y -= 0.25;
+    	all->plr.pos.y -= 0.25;
 	if (keycode == 's')
-		all->plr->pos.y += 0.25;
+		all->plr.pos.y += 0.25;
 	if (keycode == 'a')
-		all->plr->dir -= 0.25;
+		all->plr.pos.x -= 0.25;
 	if (keycode == 'd')
-		all->plr->dir += 0.25;
+		all->plr.pos.x += 0.25;
 //	mlx_hook(all->win->mlx_win, 2, 1L<<0, key_hook, &all);
     draw_screen(all);
 
@@ -84,9 +86,10 @@ int main(int argc, char **argv) {
     if (!open_file(argv[1], &textures))
         return (0);
 
-	all.plr->pos.x = 15.75;
-	all.plr->pos.y = 10.75;
-	all.plr->dir = 1;
+	all.plr.pos.x = 15.75;
+	all.plr.pos.y = 10.75;
+	all.plr.dir.x = 0.5;
+	all.plr.dir.y = 1;
 
 	all.win = &img;
 
