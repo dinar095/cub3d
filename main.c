@@ -1,63 +1,68 @@
 #include "./game/ft_game.h"
 #include "./parser/ft_parser.h"
 
+/*
+** finds crossing dot of two NONPARALLEL vectors.
+** It takes coordinates of two vectors, and of two dots
+** lying on a line of the vectors.
+** (from: https://habr.com/ru/post/523440/)
+*/
 
+t_cord   count_rays_cross(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)
+{
+	t_cord dot_c;
+	t_cord c;
+	double  q;
+	double  n;
+
+	ft_bzero(&dot_c, sizeof(t_cord));
+	if (a.y != 0)
+	{
+		q = - a.x / a.y;
+		n = ((dot_b.x - dot_a.x) + q * (dot_b.y - dot_a.y)) /
+			(b.x + b.y * q);
+	}
+	else if (b.y != 0)
+		n = (dot_b.y - dot_a.y) / b.y;
+	else
+	{
+		ft_putstr_fd("Not cross", 1);
+		return (dot_a); // Затычка!!!!!!!!!!!!!!
+	}
+	dot_c.x = dot_b.x - n * b.x;
+	dot_c.y = dot_b.y - n * b.y;
+	return (dot_c);
+}
 void draw_screen(t_all *all)
 {
 	t_cord ray;
-	t_cord prev;
-	int minus;
-	t_cord tmp;
-
+	t_cord a;
+	t_cord b = {0, 1};
+	t_cord cross;
+	t_cord dot_a;
+	t_cord dot_b;
 
 
 	char **map = all->map;
 
-
-	double begin = -M_PI/6;
-	double end = M_PI/6;
-
 	init_img(all->win);
 	scale_pix(all->win, map);
+	a = all->plr.dir;
+	dot_a = all->plr.pos;
+	dot_b.x = ceil(all->plr.pos.x);//работает для правой стороны
+	dot_b.y = ceil(all->plr.pos.y);
+	cross = count_rays_cross(a, b, dot_a, dot_b);
 	mlx_put_image_to_window(all->win->mlx, all->win->mlx_win, all->win->img, 0, 0);
 
-	while (begin < end)
-	{
-
-		ray.x = all->plr.pos.x;
-		ray.y = all->plr.pos.y;
-tmp = all->plr.dir;
-		all->plr.dir.x *= cos(begin);
-		all->plr.dir.y *= sin(begin);
-
-		while (!(is_wall_cord(map, ray)))
-		{
-			prev = ray;
-			int col = 0xFFFF00;
-
-//
-			my_mlx_pixel_put(all->win, ray.x * SCALE, ray.y * SCALE, col);
-
-			if (all->plr.dir.x == 1 && all->plr.dir.y == 0)//если луч кинут на право
-				ray.x++;
-			if (all->plr.dir.y == 1 && all->plr.dir.x == 0)//если луч кинут на лево
-				ray.y++;
-			else if (all->plr.dir.x > 0 && all->plr.dir.y > 0)//для iV части круга
-			{
-				ray.x = floor(ray.x + 1);//для иксов
-				ray.y = ((ray.x - prev.x) / all->plr.dir.y) * all->plr.dir.x + prev.x;
-				tmp.y = floor(ray.y + 1); //для игриков
-				tmp.x = ((ray.y - prev.y) / all->plr.dir.x) * all->plr.dir.y + prev.y;
-				if (tmp.x - ray.x < 0)
-					ray = tmp;
-			}
 
 
-		}
+	//while (!(is_wall_cord(map, ray)))
+	//{
+		int col = 0xFFFF00;
+//	}
 
-
-		begin += 0.0025;
-	}
+	my_mlx_pixel_put(all->win, dot_a.x * SCALE, dot_a.y * SCALE, col);
+	my_mlx_pixel_put(all->win, cross.x * SCALE, cross.y * SCALE, col);
 	mlx_put_image_to_window(all->win->mlx, all->win->mlx_win, all->win->img, 0, 0);
 }
 
@@ -88,8 +93,8 @@ int main(int argc, char **argv) {
 
 	all.plr.pos.x = 15.75;
 	all.plr.pos.y = 10.75;
-	all.plr.dir.x = 0.5;
-	all.plr.dir.y = 1;
+	all.plr.dir.x = 1;
+	all.plr.dir.y = 0;
 
 	all.win = &img;
 
