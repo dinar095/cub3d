@@ -3,7 +3,7 @@
 # define FT_GAME_H
 # include "../parser/ft_parser.h"
 # include <math.h>
-# include "../minilibx/mlx.h"
+# include "../linminilibx//mlx.h"
 # define SCALE 40
 typedef struct s_chel
 {
