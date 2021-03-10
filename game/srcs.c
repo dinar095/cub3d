@@ -3,38 +3,15 @@ void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char    *dst;
 
-	if (x > 0 && y > 0) {
+	if (x > 0 && y > 0 && x < 1300 && y < 800)
+	{
         dst = data->addr + (y * data->line_l + x * (data->bpp / 8));
         *(unsigned int *) dst = color;
     }
-    }
-
-double ds_to_point(t_cord start, t_cord end)
-{
-	double xx = start.x - end.x;
-	double yy = start.y - end.y;
-	return sqrt(xx*xx + yy*yy);
 }
-//
-//int is_wall_cord(char **map,t_cord dot, t_cord ray)
-//{
-//    int x;
-//    int y;
-//    if (ray.x > 0)
-//    {
-//        x = (int)dot.x;
-//    }
-//    else
-//        x = (int)dot.x - 1;
-//    if (ray.y > 0)
-//        y = (int)dot.y;
-//    else
-//        y = (int)dot.y - 1;
-//    if (map[y][x] != '1')
-//        return 0;
-//    else
-//        return 1;
-//}
+
+
+
 int is_wall_cord(char **map,t_cord dot, t_cord ray)
 {
     int x;
@@ -52,16 +29,6 @@ int is_wall_cord(char **map,t_cord dot, t_cord ray)
         return 0;
     else
         return 1;
-}
-
-int is_wall_point(char **map,double x,double y)
-{
-	t_cord ray = {x, y};
-
-	if (map[(int) ray.y][(int) ray.x] != '1')
-		return 0;
-	else
-		return 1;
 }
 
 

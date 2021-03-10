@@ -8,7 +8,7 @@
 ** (from: https://habr.com/ru/post/523440/)
 */
 
-t_cord   count_rays_cross(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)//точка пересечения по точке и вектору
+t_cord   crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)//точка пересечения по точке и вектору
 {
 	t_cord dot_c;
 	t_cord c;
@@ -24,10 +24,6 @@ t_cord   count_rays_cross(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)//то�
         {
 	        write(0, "1", 1);
         }
-//        if ((b.x + b.y * q) == 0)
-//        {
-//            write(0, "2", 1);
-//        }
 		q = - a.x / a.y;
 		n = ((dot_b.x - dot_a.x) + q * (dot_b.y - dot_a.y)) /
 			(b.x + b.y * q);
@@ -119,53 +115,61 @@ t_cord fwd_pnt(t_cord ray, t_cord pnt, int flag)
     }
     return (pnt);
 }
+void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x)
+{
+	double d_to_wall;
+	double y0;
+	double y1;
+	double h;
+	double i;
+
+	i = 0;
+	d_to_wall = len_ray(plr, cross);
+	h = textures.height/d_to_wall;
+	y0 = textures.height/2 - h/2;
+	y1 = textures.height/2 + h/2;
+	while (i <= textures.height)
+	{
+		if (i > y0 && i < y1)
+		{
+			//my_mlx_pixel_put(all->win, x, i, 0xFFA500);
+		}
+		i++;
+
+	}
+//	mlx_put_image_to_window(all->win->mlx, all->win->mlx_win, all->win->img, 0, 0);
+
+
+}
 void draw_screen(t_all *all)
 {
-	t_cord ray;
-	t_cord a;//вектор пользователя
 	t_cord b_x = {0, 1};//вектор по x
 	t_cord b_y = {1, 0};//вектор по y
 	t_cord cross;
 	t_cord cross_x;//вектор пересечения луча и х координаты
 	t_cord cross_y;//вектор пересечения луч и у координаты
-	t_cord dot_a;//точка на векторе пользователя
 	t_cord dot_b;//точка на векторе сетки
 	t_cord begin;//вектор поворота пользователя
 	t_cord end;
-
+	int i = 0;
 
 	char **map = all->map;
 	mlx_destroy_image(all->win->mlx, all->win->img);
 	init_img(all->win);
 	scale_pix(all->win, map);
-	a = all->plr.dir;
-	dot_a = all->plr.pos;
-
-
-//	mlx_put_image_to_window(all->win->mlx, all->win->mlx_win, all->win->img, 0, 0);
-
-//	my_mlx_pixel_put(all->win, cross_x.x * SCALE, cross_x.y * SCALE, 0xFFAA00);
-
-
 	int col = 0xFFFF00;
-
-	begin = rotateZ(a, 0);
-
+	begin = rotateZ(all->plr.dir, -0.57);
 	double angel = 0;
-
-	while (angel < 0.785398)
+	while (angel < 0.57)//привязать к ширине экрана
 	{
         end = rotateZ(begin, angel);
         dot_b = net_point(end, all->plr.pos);
-
 		cross = all->plr.pos;
-
-
 		while (!(is_wall_cord(map, cross, end)))
 		{
-                cross_x = count_rays_cross(end, b_x, dot_a, dot_b);//точка пересечения по х
-                 cross_y = count_rays_cross(end, b_y, dot_a, dot_b);//точка пересечения по у
-			if (len_ray(dot_a, cross_x) < len_ray(dot_a, cross_y))//если по х ближе чем по у
+                cross_x = crc(end, b_x, all->plr.pos, dot_b);//точка пересечения по х
+                cross_y = crc(end, b_y, all->plr.pos, dot_b);//точка пересечения по у
+			if (len_ray(all->plr.pos, cross_x) < len_ray(all->plr.pos, cross_y))//если по х ближе чем по у
 			{
 				cross = cross_x;
 				dot_b = fwd_pnt(end, dot_b, 1);
@@ -175,34 +179,14 @@ void draw_screen(t_all *all)
 				cross = cross_y;
                 dot_b = fwd_pnt(end, dot_b, -1);
 			}
-
-            my_mlx_pixel_put(all->win, cross.x * SCALE, cross.y * SCALE, col);
-          //  mlx_put_image_to_window(all->win->mlx, all->win->mlx_win, all->win->img, 0, 0);
-
+			my_mlx_pixel_put(all->win, cross.x * SCALE, cross.y * SCALE, col);
 		}
-		angel += 0.01;
+
+		angel += 0.0001;
+		print_wall(all->plr.pos, cross, all->textures, all, i);
+		i++;
 
 	}
-
-//	while (angel < 0.3)
-//	{
-//		dot_b.x = ceil(all->plr.pos.x);//работает для правой стороны
-//		dot_b.y = ceil(all->plr.pos.y);
-//		cross_y = count_rays_cross(rotateZ(begin, angel), b_y, dot_a, dot_b);
-//
-//		while (!(is_wall_cord(map, cross_y)))
-//		{
-//			//для вертикальных линий
-//			cross_y = count_rays_cross(rotateZ(begin, angel), b_y, dot_a, dot_b);
-//			dot_b.y++;
-//			my_mlx_pixel_put(all->win, cross_y.x * SCALE, cross_y.y * SCALE, col);
-//			mlx_put_image_to_window(all->win->mlx, all->win->mlx_win, all->win->img, 0, 0);
-//		}
-//		angel += 0.01;
-//	}
-
-	//my_mlx_pixel_put(all->win, dot_a.x * SCALE, dot_a.y * SCALE, col);
-
 	mlx_put_image_to_window(all->win->mlx, all->win->mlx_win, all->win->img, 0, 0);
 }
 

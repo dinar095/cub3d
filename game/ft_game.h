@@ -24,7 +24,7 @@
 #  define RIGHT 65363
 #  define SPACE 32
 # else
-#  include "/mlx.h"//прописать для мака
+#  include "../minilibx/mlx.h"
 #  define OS "MAC"
 #  define ESC 53
 #  define W 13
@@ -90,4 +90,5 @@ void scale_pix(t_data *img, char **map);
 void    init_img(t_data *img);
 double ds_to_point(t_cord start, t_cord end);
 void            my_mlx_pixel_put(t_data *data, int x, int y, int color);
+t_cord   		crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b);
 #endif //DESAUSAG_FT_GAME_H
