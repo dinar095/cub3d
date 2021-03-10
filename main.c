@@ -1,17 +1,8 @@
 #include "./game/ft_game.h"
-#include "./parser/ft_parser.h"
-
-/*
-** finds crossing dot of two NONPARALLEL vectors.
-** It takes coordinates of two vectors, and of two dots
-** lying on a line of the vectors.
-** (from: https://habr.com/ru/post/523440/)
-*/
 
 t_cord   crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)//точка пересечения по точке и вектору
 {
 	t_cord dot_c;
-	t_cord c;
 	double  q;
 	double  n;
 
@@ -115,7 +106,7 @@ t_cord fwd_pnt(t_cord ray, t_cord pnt, int flag)
     }
     return (pnt);
 }
-void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x)
+void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x, t_cord ray, int col)
 {
 	double d_to_wall;
 	double y0;
@@ -124,7 +115,8 @@ void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x)
 	double i;
 
 	i = 0;
-	d_to_wall = len_ray(plr, cross);
+	d_to_wall = len_ray(plr, cross) * cos(angle(ray, all->plr.dir));
+
 	h = textures.height/d_to_wall;
 	y0 = textures.height/2 - h/2;
 	y1 = textures.height/2 + h/2;
@@ -132,7 +124,7 @@ void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x)
 	{
 		if (i > y0 && i < y1)
 		{
-			//my_mlx_pixel_put(all->win, x, i, 0xFFA500);
+			my_mlx_pixel_put(all->win, x, i, col);
 		}
 		i++;
 
@@ -157,7 +149,7 @@ void draw_screen(t_all *all)
 	mlx_destroy_image(all->win->mlx, all->win->img);
 	init_img(all->win);
 	scale_pix(all->win, map);
-	int col = 0xFFFF00;
+	int col;
 	begin = rotateZ(all->plr.dir, -0.57);
 	double angel = 0;
 	while (angel < 0.57)//привязать к ширине экрана
@@ -171,19 +163,21 @@ void draw_screen(t_all *all)
                 cross_y = crc(end, b_y, all->plr.pos, dot_b);//точка пересечения по у
 			if (len_ray(all->plr.pos, cross_x) < len_ray(all->plr.pos, cross_y))//если по х ближе чем по у
 			{
+				col = 0xFFFF00;
 				cross = cross_x;
 				dot_b = fwd_pnt(end, dot_b, 1);
 			}
 			else //Если у ближе чем х
 			{
+				col = 0x858585;
 				cross = cross_y;
                 dot_b = fwd_pnt(end, dot_b, -1);
 			}
 			my_mlx_pixel_put(all->win, cross.x * SCALE, cross.y * SCALE, col);
 		}
 
-		angel += 0.0001;
-		print_wall(all->plr.pos, cross, all->textures, all, i);
+		angel += 0.0007;
+		print_wall(all->plr.pos, cross, all->textures, all, i, end, col);
 		i++;
 
 	}

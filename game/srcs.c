@@ -24,7 +24,6 @@ int is_wall_cord(char **map,t_cord dot, t_cord ray)
         y = (int)ceil(dot.y) - 1;
     else
         y = (int)dot.y;
-
     if (map[y][x] != '1')
         return 0;
     else
