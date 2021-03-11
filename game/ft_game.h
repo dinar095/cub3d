@@ -4,7 +4,7 @@
 # include "../parser/ft_parser.h"
 # include <math.h>
 
-# define SCALE 40
+# define SCALE 5
 
 # ifdef __linux__
 # include "../linminilibx/mlx.h"

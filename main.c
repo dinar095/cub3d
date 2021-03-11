@@ -115,7 +115,7 @@ void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x,
 	double i;
 
 	i = 0;
-	d_to_wall = len_ray(plr, cross) * cos(angle(ray, all->plr.dir));
+	d_to_wall = len_ray(plr, cross);
 
 	h = textures.height/d_to_wall;
 	y0 = textures.height/2 - h/2;
@@ -139,10 +139,10 @@ void draw_screen(t_all *all)
 	t_cord b_y = {1, 0};//вектор по y
 	t_cord cross;
 	t_cord cross_x;//вектор пересечения луча и х координаты
-	t_cord cross_y;//вектор пересечения луч и у координаты
+
 	t_cord dot_b;//точка на векторе сетки
-	t_cord begin;//вектор поворота пользователя
-	t_cord end;
+
+	t_cord ray;
 	int i = 0;
 
 	char **map = all->map;
@@ -150,34 +150,34 @@ void draw_screen(t_all *all)
 	init_img(all->win);
 	scale_pix(all->win, map);
 	int col;
-	begin = rotateZ(all->plr.dir, -0.57);
-	double angel = 0;
-	while (angel < 0.57)//привязать к ширине экрана
+	float angel;
+	angel = 45 * M_PI/180;
+	ray = rotateZ(all->plr.dir, -angel/2);
+	while (i <= all->textures.width)//привязать к ширине экрана
 	{
-        end = rotateZ(begin, angel);
-        dot_b = net_point(end, all->plr.pos);
+
+        dot_b = net_point(ray, all->plr.pos);//точка пересечения сетки
 		cross = all->plr.pos;
-		while (!(is_wall_cord(map, cross, end)))
+		while (!(is_wall_cord(map, cross, ray)))
 		{
-                cross_x = crc(end, b_x, all->plr.pos, dot_b);//точка пересечения по х
-                cross_y = crc(end, b_y, all->plr.pos, dot_b);//точка пересечения по у
-			if (len_ray(all->plr.pos, cross_x) < len_ray(all->plr.pos, cross_y))//если по х ближе чем по у
+                cross_x = crc(ray, b_x, all->plr.pos, dot_b);//точка пересечения по х
+                cross = crc(ray, b_y, all->plr.pos, dot_b);//точка пересечения по у
+			if (len_ray(all->plr.pos, cross_x) < len_ray(all->plr.pos, cross))//если по х ближе чем по у
 			{
 				col = 0xFFFF00;
 				cross = cross_x;
-				dot_b = fwd_pnt(end, dot_b, 1);
+				dot_b = fwd_pnt(ray, dot_b, 1);
 			}
 			else //Если у ближе чем х
 			{
 				col = 0x858585;
-				cross = cross_y;
-                dot_b = fwd_pnt(end, dot_b, -1);
+                dot_b = fwd_pnt(ray, dot_b, -1);
 			}
 			my_mlx_pixel_put(all->win, cross.x * SCALE, cross.y * SCALE, col);
 		}
 
-		angel += 0.0007;
-		print_wall(all->plr.pos, cross, all->textures, all, i, end, col);
+		print_wall(all->plr.pos, cross, all->textures, all, i, ray, col);
+        ray = rotateZ(ray, (angel)/all->textures.width);
 		i++;
 
 	}
@@ -214,10 +214,10 @@ int main(int argc, char **argv) {
         return (0);
     all.textures = textures;
 
-	all.plr.pos.x = 20.75;
-	all.plr.pos.y = 1.75;
-	all.plr.dir.x = 0.3;
-	all.plr.dir.y = -0.6;
+	all.plr.pos.x = 10;
+	all.plr.pos.y = 5;
+	all.plr.dir.x = 0;
+	all.plr.dir.y = -1;
 
 	all.win = &img;
 
