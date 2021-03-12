@@ -1,11 +1,11 @@
 #include "ft_game.h"
-void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
+void            my_mlx_pixel_put(t_all *all, int x, int y, int color)
 {
 	char    *dst;
 
-	if (x > 0 && y > 0 && x < 1300 && y < 800)
+	if (x > 0 && y > 0 && x < 1600 && y < 900)
 	{
-        dst = data->addr + (y * data->line_l + x * (data->bpp / 8));
+        dst = all->win->addr + (y * all->win->line_l + x * (all->win->bpp / 8));
         *(unsigned int *) dst = color;
     }
 }
@@ -31,7 +31,7 @@ int is_wall_cord(char **map,t_cord dot, t_cord ray)
 }
 
 
-void scale_pix(t_data *img, char **map)
+void scale_pix(t_all *all, char **map)
 {
 	int x;
 	int y;
@@ -45,10 +45,10 @@ void scale_pix(t_data *img, char **map)
 			if (map[y][x] == '1') {
 				i = 0;
 				while (i++ < SCALE) {
-					my_mlx_pixel_put(img, x * SCALE + i, y * SCALE, 0x505050);
+					my_mlx_pixel_put(all, x * SCALE + i, y * SCALE, 0x505050);
 					j = 0;
 					while (j++ < SCALE)
-						my_mlx_pixel_put(img, x * SCALE + i, y * SCALE + j, 0x505050);
+						my_mlx_pixel_put(all, x * SCALE + i, y * SCALE + j, 0x505050);
 				}
 			}
 
@@ -64,9 +64,9 @@ void scale_pix(t_data *img, char **map)
 		}
 	}
 }
-void    init_img(t_data *img)
+void    init_img(t_all *all)
 {
-	img->img= mlx_new_image(img->mlx, 1300, 800);
-	img->addr = mlx_get_data_addr(img->img, &(img->bpp),&(img->line_l),
-								  &(img->endian));
+	all->win->img= mlx_new_image(all->win->mlx, all->textures.width, all->textures.height);
+	all->win->addr = mlx_get_data_addr(all->win->img, &(all->win->bpp),&(all->win->line_l),
+								  &(all->win->endian));
 }

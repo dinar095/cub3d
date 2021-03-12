@@ -86,9 +86,9 @@ typedef struct	s_all // структура для всего вместе
 }				  t_all;
 int is_wall_cord(char **map,t_cord dot, t_cord ray);
 int is_wall_point(char **map,double x,double y);
-void scale_pix(t_data *img, char **map);
-void    init_img(t_data *img);
+void scale_pix(t_all *all, char **map);
+void    init_img(t_all *all);
 double ds_to_point(t_cord start, t_cord end);
-void            my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void            my_mlx_pixel_put(t_all *all, int x, int y, int color);
 t_cord   		crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b);
 #endif //DESAUSAG_FT_GAME_H

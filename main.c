@@ -124,7 +124,7 @@ void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x,
 	{
 		if (i > y0 && i < y1)
 		{
-			my_mlx_pixel_put(all->win, x, i, col);
+			my_mlx_pixel_put(all, x, i, col);
 		}
 		i++;
 
@@ -147,8 +147,8 @@ void draw_screen(t_all *all)
 
 	char **map = all->map;
 	mlx_destroy_image(all->win->mlx, all->win->img);
-	init_img(all->win);
-	scale_pix(all->win, map);
+	init_img(all);
+	scale_pix(all, map);
 	int col;
 	float angel;
 	angel = 45 * M_PI/180;
@@ -173,7 +173,7 @@ void draw_screen(t_all *all)
 				col = 0x858585;
                 dot_b = fwd_pnt(ray, dot_b, -1);
 			}
-			my_mlx_pixel_put(all->win, cross.x * SCALE, cross.y * SCALE, col);
+			my_mlx_pixel_put(all, cross.x * SCALE, cross.y * SCALE, col);
 		}
 
 		print_wall(all->plr.pos, cross, all->textures, all, i, ray, col);
@@ -224,9 +224,9 @@ int main(int argc, char **argv) {
 
 	all.map = textures.map;
 	img.mlx = mlx_init();
-	img.mlx_win = mlx_new_window(img.mlx, 1300, 800, "Cub3d!");
+	img.mlx_win = mlx_new_window(img.mlx, textures.width, textures.height, "Cub3d!");
 
-    init_img(all.win);
+    init_img(&all);
 	draw_screen(&all);
 
   //  mlx_key_hook(img.mlx_win, key_hook, &all);
