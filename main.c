@@ -88,6 +88,18 @@ t_cord net_point(t_cord ray, t_cord pos)
         tmp.y = floor(pos.y);
     return (tmp);
 }
+
+unsigned int get_color(t_data txre_img, int x, int y)
+{
+	char *dst;
+	txre_img.addr = mlx_get_data_addr(txre_img.img, &txre_img.bpp, &txre_img.line_l, &txre_img.endian);
+	if (x > 0 && y > 0 && x < 64 && y < 64) //допилисть
+	{
+		dst = txre_img.addr + (y * txre_img.line_l + x * (txre_img.bpp / 8));
+		return (*(unsigned int *) dst);
+	}
+}
+
 t_cord fwd_pnt(t_cord ray, t_cord pnt, int flag)
 {
     if (flag > 0)
@@ -106,13 +118,16 @@ t_cord fwd_pnt(t_cord ray, t_cord pnt, int flag)
     }
     return (pnt);
 }
-void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x, t_cord ray, int col)
+void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x, t_cord ray, int side)
 {
 	double d_to_wall;
 	double y0;
 	double y1;
 	double h;
 	double i;
+	unsigned int color;
+	double k;
+
 
 	i = 0;
 	d_to_wall = len_ray(plr, cross) * angle(all->plr.dir, ray);
@@ -120,18 +135,28 @@ void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x,
 	h = textures.height/(d_to_wall);
 	y0 = textures.height/2 - h/2;
 	y1 = textures.height/2 + h/2;
+	k = all->txre_img[0].h / h;
 	while (i <= textures.height)
 	{
 		if (i >= y0 && i <= y1)
 		{
-			my_mlx_pixel_put(all, x, i, col);
+			int tmp1 = (int)((cross.x - floor(cross.x))*64);
+			int tmp2 = (int)(k*(i-y0));
+			color = get_color(all->txre_img[0], tmp1, tmp2);
+			my_mlx_pixel_put(all, x, i, color);
 		}
 		i++;
 	}
 
 //	mlx_put_image_to_window(all->win->mlx, all->win->mlx_win, all->win->img, 0, 0);
 }
-//void init_texture();
+void init_texture(t_all *all)
+{
+	all->txre_img[0].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.no, &all->txre_img[0].w, &all->txre_img[0].h);
+
+	all->txre_img[1].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.so, &all->txre_img[1].w, &all->txre_img[1].h);
+}//need free pa
+
 void draw_screen(t_all *all)
 {
 	t_cord b_x = {0, 1};//вектор по x
@@ -148,7 +173,7 @@ void draw_screen(t_all *all)
 	mlx_destroy_image(all->win->mlx, all->win->img);
 	init_img(all);
 	scale_pix(all, map);
-	int col;
+	int side;
 	float angel;
 	angel = 46 * M_PI/180;
 	ray = rotateZ(all->plr.dir, -angel/2);
@@ -163,19 +188,19 @@ void draw_screen(t_all *all)
                 cross = crc(ray, b_y, all->plr.pos, dot_b);//точка пересечения по у
 			if (len_ray(all->plr.pos, cross_x) < len_ray(all->plr.pos, cross))//если по х ближе чем по у
 			{
-				col = 0xFFFF00;
+				side = 0;
 				cross = cross_x;
 				dot_b = fwd_pnt(ray, dot_b, 1);
 			}
 			else //Если у ближе чем х
 			{
-				col = 0x858585;
+				side = 1;
                 dot_b = fwd_pnt(ray, dot_b, -1);
 			}
-			my_mlx_pixel_put(all, cross.x * SCALE, cross.y * SCALE, col);
+			my_mlx_pixel_put(all, cross.x * SCALE, cross.y * SCALE, 0xFF1010);
 		}
 
-		print_wall(all->plr.pos, cross, all->textures, all, i, ray, col);
+		print_wall(all->plr.pos, cross, all->textures, all, i, ray, side);
         ray = rotateZ(ray, (angel)/all->textures.width);
 		i++;
 
@@ -199,6 +224,8 @@ int             key_hook(int keycode, t_all *all)
 		all->plr.dir = rotateZ(all->plr.dir, -0.1);
 	if (keycode == RIGHT)
 		all->plr.dir = rotateZ(all->plr.dir, 0.1);
+	if (keycode == ESC)
+		exit(EXIT_SUCCESS);
 //	mlx_hook(all->win->mlx_win, 2, 1L<<0, key_hook, &all);
     draw_screen(all);
 
@@ -224,7 +251,7 @@ int main(int argc, char **argv) {
 	all.map = textures.map;
 	img.mlx = mlx_init();
 	img.mlx_win = mlx_new_window(img.mlx, textures.width, textures.height, "Cub3d!");
-	init_texture();
+	init_texture(&all);
     init_img(&all);
 	draw_screen(&all);
 

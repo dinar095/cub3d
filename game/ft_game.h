@@ -56,9 +56,8 @@ typedef struct  s_data
 	int         bpp;
 	int         line_l;
 	int         endian;
-	int 		wght;
-	int			hgt;
-
+	int 		w;
+	int			h;
 }               t_data;
 
 typedef struct		s_ray
@@ -83,6 +82,7 @@ typedef struct	s_plr //структура для игрока и луча
 typedef struct	s_all // структура для всего вместе
 {
 	t_data		*win;
+	t_data		txre_img[5];
 	t_plr		plr;
 	char		**map;
 	t_textures textures;
