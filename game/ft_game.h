@@ -56,6 +56,9 @@ typedef struct  s_data
 	int         bpp;
 	int         line_l;
 	int         endian;
+	int 		wght;
+	int			hgt;
+
 }               t_data;
 
 typedef struct		s_ray

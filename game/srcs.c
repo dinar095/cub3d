@@ -5,7 +5,7 @@ void            my_mlx_pixel_put(t_all *all, int x, int y, int color)
 
 	if (x > 0 && y > 0 && x < 1600 && y < 900)
 	{
-        dst = all->win->addr + (y * all->win->line_l + x * (all->win->bpp / 8));
+        dst = all->win->addr + (y * all->win->line_l + x * (all->win->bpp / 8));//
         *(unsigned int *) dst = color;
     }
 }

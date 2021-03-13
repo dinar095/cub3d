@@ -54,7 +54,7 @@ t_cord rotateZ(t_cord vector,double angle)
 }
 double len_ray(t_cord ray1, t_cord ray2)
 {
-	return (sqrt(pow(ray1.y - ray2.y, 2)) + pow(ray1.x - ray2.x, 2));
+	return (sqrt(pow(ray1.y - ray2.y, 2) + pow(ray1.x - ray2.x, 2)));
 }
 //void         drop_rays(t_all *all)
 //{
@@ -115,24 +115,23 @@ void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x,
 	double i;
 
 	i = 0;
-	d_to_wall = len_ray(plr, cross);
+	d_to_wall = len_ray(plr, cross) * angle(all->plr.dir, ray);
 
-	h = textures.height/d_to_wall;
+	h = textures.height/(d_to_wall);
 	y0 = textures.height/2 - h/2;
 	y1 = textures.height/2 + h/2;
 	while (i <= textures.height)
 	{
-		if (i > y0 && i < y1)
+		if (i >= y0 && i <= y1)
 		{
 			my_mlx_pixel_put(all, x, i, col);
 		}
 		i++;
-
 	}
+
 //	mlx_put_image_to_window(all->win->mlx, all->win->mlx_win, all->win->img, 0, 0);
-
-
 }
+//void init_texture();
 void draw_screen(t_all *all)
 {
 	t_cord b_x = {0, 1};//вектор по x
@@ -151,9 +150,9 @@ void draw_screen(t_all *all)
 	scale_pix(all, map);
 	int col;
 	float angel;
-	angel = 45 * M_PI/180;
+	angel = 46 * M_PI/180;
 	ray = rotateZ(all->plr.dir, -angel/2);
-	while (i <= all->textures.width)//привязать к ширине экрана
+	while (i < all->textures.width)//привязать к ширине экрана
 	{
 
         dot_b = net_point(ray, all->plr.pos);//точка пересечения сетки
@@ -225,11 +224,12 @@ int main(int argc, char **argv) {
 	all.map = textures.map;
 	img.mlx = mlx_init();
 	img.mlx_win = mlx_new_window(img.mlx, textures.width, textures.height, "Cub3d!");
-
+	init_texture();
     init_img(&all);
 	draw_screen(&all);
 
-  //  mlx_key_hook(img.mlx_win, key_hook, &all);
+   // mlx_key_hook(img.mlx_win, key_hook, &all);
+ 	//mlx_loop_hook(all.win->mlx, draw_screen, all.win);
     mlx_hook(all.win->mlx_win, 2, 1L<<0, key_hook, &all);
 
 
