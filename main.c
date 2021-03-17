@@ -128,23 +128,25 @@ void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x,
 	unsigned int color;
 	double k;
 
-
+printf("%d\n", side);
 	i = 0;
 	d_to_wall = len_ray(plr, cross) * angle(all->plr.dir, ray);
 
 	h = textures.height/(d_to_wall);
 	y0 = textures.height/2 - h/2;
 	y1 = textures.height/2 + h/2;
-	k = all->txre_img[0].h / h;
+	k = all->txre_img[side].h / h;
 	while (i <= textures.height)
 	{
 		if (i >= y0 && i <= y1)
 		{
 			int tmp1 = (int)((cross.x - floor(cross.x))*64);
 			int tmp2 = (int)(k*(i-y0));
-			color = get_color(all->txre_img[0], tmp1, tmp2);
+			color = get_color(all->txre_img[side], tmp1, tmp2);
 			my_mlx_pixel_put(all, x, i, color);
 		}
+//		else
+//			my_mlx_pixel_put(all, x, i, 0x00bfff);
 		i++;
 	}
 
@@ -199,7 +201,6 @@ void draw_screen(t_all *all)
 			}
 			my_mlx_pixel_put(all, cross.x * SCALE, cross.y * SCALE, 0xFF1010);
 		}
-
 		print_wall(all->plr.pos, cross, all->textures, all, i, ray, side);
         ray = rotateZ(ray, (angel)/all->textures.width);
 		i++;
@@ -212,12 +213,36 @@ void draw_screen(t_all *all)
 int             key_hook(int keycode, t_all *all)
 {
    // printf("Keycode: %d\n", keycode);
+   t_cord tmp;
     if (keycode == W)
-		all->plr.pos.y -= 0.25;
+	{
+    	tmp.x = all->plr.pos.x + all->plr.dir.x * 0.5;
+    	tmp.y = all->plr.pos.y + all->plr.dir.y * 0.5;
+    	if (!(is_wall_cord(all->map, tmp, all->plr.dir)))
+    	{
+			all->plr.pos.x += all->plr.dir.x * 0.5;
+			all->plr.pos.y += all->plr.dir.y * 0.5;
+		}
+	}
 	if (keycode == S)
-		all->plr.pos.y += 0.25;
-	if (keycode == A)
+	{
+		tmp.x = all->plr.pos.x - all->plr.dir.x * 0.5;
+		tmp.y = all->plr.pos.y - all->plr.dir.y * 0.5;
+		if (!(is_wall_cord(all->map, tmp, all->plr.dir)))
+		{
+			all->plr.pos.x -= all->plr.dir.x * 0.5;
+			all->plr.pos.y -= all->plr.dir.y * 0.5;
+		}
+	}
+	if (keycode == A) {
+//		double oldDirX = all->plr.dir.x;
+//		all->plr.dir.x = all->plr.dir.x * cos(-0.5) - all->plr.dir.y * sin(-0.5);
+//		all->plr.dir.y = oldDirX * sin(-0.5) + all->plr.dir.y * cos(-0.5);
+//		double oldPlaneX = planeX;
+//		planeX = planeX * cos(-rotSpeed) - planeY * sin(-rotSpeed);
+//		planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
 		all->plr.pos.x -= 0.25;
+	}
 	if (keycode == D)
 		all->plr.pos.x += 0.25;
 	if (keycode == LEFT)

@@ -13,10 +13,10 @@
 */
 #  define OS "LINUX"
 #  define ESC 65307
-#  define W 119
-#  define A 97
-#  define S 115
-#  define D 100
+#  define W 1731
+#  define A 1734
+#  define S 1753
+#  define D 1751
 #  define C 99
 #  define UP 65362
 #  define LEFT 65361
