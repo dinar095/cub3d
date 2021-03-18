@@ -45,6 +45,7 @@ t_cord rotateZ(t_cord vector,double angle)
 { // angle in radians
 
 //normalize(vector); // No  need to normalize, vector is already ok...
+	angle = angle * (M_PI/180);
 	t_cord tmp;
 	tmp.x = (vector.x * cos(angle) - vector.y * sin(angle));
 
@@ -128,7 +129,7 @@ void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x,
 	unsigned int color;
 	double k;
 
-printf("%d\n", side);
+//printf("%d\n", side);
 	i = 0;
 	d_to_wall = len_ray(plr, cross) * angle(all->plr.dir, ray);
 
@@ -177,7 +178,7 @@ void draw_screen(t_all *all)
 	scale_pix(all, map);
 	int side;
 	float angel;
-	angel = 46 * M_PI/180;
+	angel = 46;
 	ray = rotateZ(all->plr.dir, -angel/2);
 	while (i < all->textures.width)//привязать к ширине экрана
 	{
@@ -234,21 +235,34 @@ int             key_hook(int keycode, t_all *all)
 			all->plr.pos.y -= all->plr.dir.y * 0.5;
 		}
 	}
-	if (keycode == A) {
-//		double oldDirX = all->plr.dir.x;
-//		all->plr.dir.x = all->plr.dir.x * cos(-0.5) - all->plr.dir.y * sin(-0.5);
-//		all->plr.dir.y = oldDirX * sin(-0.5) + all->plr.dir.y * cos(-0.5);
-//		double oldPlaneX = planeX;
-//		planeX = planeX * cos(-rotSpeed) - planeY * sin(-rotSpeed);
-//		planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
-		all->plr.pos.x -= 0.25;
+	if (keycode == A)
+	{
+		t_cord	nDir;
+		nDir = rotateZ(all->plr.dir, -90);
+		tmp.x = all->plr.pos.x + nDir.x * 0.5;
+		tmp.y = all->plr.pos.y + nDir.y * 0.5;
+		if (!(is_wall_cord(all->map, tmp, nDir)))
+		{
+			all->plr.pos.x += nDir.x * 0.5;
+			all->plr.pos.y += nDir.y * 0.5;
+		}
 	}
 	if (keycode == D)
-		all->plr.pos.x += 0.25;
+	{
+		t_cord	nDir;
+		nDir = rotateZ(all->plr.dir, 90);
+		tmp.x = all->plr.pos.x + nDir.x * 0.5;
+		tmp.y = all->plr.pos.y + nDir.y * 0.5;
+		if (!(is_wall_cord(all->map, tmp, nDir)))
+		{
+			all->plr.pos.x += nDir.x * 0.5;
+			all->plr.pos.y += nDir.y * 0.5;
+		}
+	}
 	if (keycode == LEFT)
-		all->plr.dir = rotateZ(all->plr.dir, -0.1);
+		all->plr.dir = rotateZ(all->plr.dir, -5);
 	if (keycode == RIGHT)
-		all->plr.dir = rotateZ(all->plr.dir, 0.1);
+		all->plr.dir = rotateZ(all->plr.dir, 5);
 	if (keycode == ESC)
 		exit(EXIT_SUCCESS);
 //	mlx_hook(all->win->mlx_win, 2, 1L<<0, key_hook, &all);
