@@ -94,7 +94,7 @@ unsigned int get_color(t_data txre_img, int x, int y)
 {
 	char *dst;
 	txre_img.addr = mlx_get_data_addr(txre_img.img, &txre_img.bpp, &txre_img.line_l, &txre_img.endian);
-	if (x > 0 && y > 0 && x < 64 && y < 64) //допилисть
+	if (x > 0 && y > 0 && x <= 64 && y <= 64) //допилисть
 	{
 		dst = txre_img.addr + (y * txre_img.line_l + x * (txre_img.bpp / 8));
 		return (*(unsigned int *) dst);
