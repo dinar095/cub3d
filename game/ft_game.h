@@ -41,43 +41,43 @@
 #  define RMOUSE 0
 # endif
 
-typedef struct s_chel
+typedef struct	s_chel
 {
-	double x;
-	double y;
-}               t_cord;
+	double		x;
+	double		y;
+}				t_cord;
 
-typedef struct  s_data
+typedef struct	s_data
 {
-	void        *img;
-	char        *addr;
-	void        *mlx;
-	void        *mlx_win;
-	int         bpp;
-	int         line_l;
-	int         endian;
+	void		*img;
+	char		*addr;
+	void		*mlx;
+	void		*mlx_win;
+	int			bpp;
+	int			line_l;
+	int			endian;
 	int 		w;
 	int			h;
 }               t_data;
 
-typedef struct		s_ray
+typedef struct	s_ray
 {
-    int				x;
-    int				side;
-    t_cord			dir;
-    double			dist;
-    double			perp;
-    t_cord			cross;
-   // t_sprite		*slist;
-}					t_ray;
+	int			x;
+	int			side;
+	t_cord		dir;
+	double		dist;
+	double		perp;
+	t_cord		cross;
+   // t_sprite	*slist;
+}				t_ray;
 
 typedef struct	s_plr //структура для игрока и луча
 {
-	t_cord       pos;
-	t_cord 		dir;
+	t_cord		pos;
+	t_cord		dir;
 	float		start;
 	float		end;
-}				  t_plr;
+}				t_plr;
 
 typedef struct	s_all // структура для всего вместе
 {
@@ -85,13 +85,14 @@ typedef struct	s_all // структура для всего вместе
 	t_data		txre_img[5];
 	t_plr		plr;
 	char		**map;
-	t_textures textures;
+	t_textures	textures;
 }				  t_all;
-int is_wall_cord(char **map,t_cord dot, t_cord ray);
-int is_wall_point(char **map,double x,double y);
-void scale_pix(t_all *all, char **map);
-void    init_img(t_all *all);
-double ds_to_point(t_cord start, t_cord end);
-void            my_mlx_pixel_put(t_all *all, int x, int y, int color);
-t_cord   		crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b);
+int				is_wall_cord(char **map,t_cord dot, t_cord ray);
+void			scale_pix(t_all *all, char **map);
+void			init_img(t_all *all);
+double			ds_to_point(t_cord start, t_cord end);
+void			my_mlx_pixel_put(t_all *all, int x, int y, int color);
+t_cord			crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b);
+double			angle(t_cord begin, t_cord end);
+t_cord			rotateZ(t_cord vector,double angle);
 #endif //DESAUSAG_FT_GAME_H

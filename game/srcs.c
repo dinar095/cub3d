@@ -70,3 +70,58 @@ void    init_img(t_all *all)
 	all->win->addr = mlx_get_data_addr(all->win->img, &(all->win->bpp),&(all->win->line_l),
 								  &(all->win->endian));
 }
+
+t_cord   crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)//точка пересечения по точке и вектору
+{
+	t_cord dot_c;
+	double  q;
+	double  n;
+
+	if (dot_b.x == dot_a.x && dot_b.y == dot_a.y)
+		return (dot_b);
+	ft_bzero(&dot_c, sizeof(t_cord));
+	if (a.y != 0)
+	{
+		if (a.y == 0)
+		{
+			write(0, "1", 1);
+		}
+		q = - a.x / a.y;
+		n = ((dot_b.x - dot_a.x) + q * (dot_b.y - dot_a.y)) /
+			(b.x + b.y * q);
+	}
+	else if (b.y != 0)
+		n = (dot_b.y - dot_a.y) / b.y;
+	else
+	{
+		ft_putstr_fd("Not cross", 1);
+		return (dot_a); // Затычка!!!!!!!!!!!!!!
+	}
+	dot_c.x = dot_b.x - n * b.x;
+	dot_c.y = dot_b.y - n * b.y;
+	return (dot_c);
+}
+
+double angle(t_cord begin, t_cord end)
+{
+	double q;
+	double a;
+	double b;
+	q = begin.x * end.x + begin.y*end.y;//скалярное произведение векторов
+	a = sqrt(pow(begin.x, 2) + pow(begin.y,2));
+	b = sqrt(pow(end.x, 2) + pow(end.y,2));
+	q = q / (a * b);
+	return (q);
+}
+t_cord rotateZ(t_cord vector,double angle)
+{ // angle in radians
+
+//normalize(vector); // No  need to normalize, vector is already ok...
+	angle = angle * (M_PI/180);
+	t_cord tmp;
+	tmp.x = (vector.x * cos(angle) - vector.y * sin(angle));
+
+	tmp.y = (vector.x * sin(angle) + vector.y * cos(angle));
+
+	return (tmp);
+}
