@@ -6,11 +6,11 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/10 18:28:14 by desausag         ###   ########.fr       */
+/*   Updated: 2021/03/20 19:17:58 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_parser.h"
+#include "../game/ft_game.h"
 
 static void	reset_textures(t_textures *textures)
 {
@@ -24,6 +24,7 @@ static void	reset_textures(t_textures *textures)
 	textures->f = -1;
 	textures->c = -1;
 	textures->map = NULL;
+	textures->plr.dir.y = -2;
 }
 
 static char 	**map_join(char ***map, char **line)
@@ -82,6 +83,61 @@ static void	parse_line(char *line, t_textures *textures)
 			get_color_fromline(&line, &(textures->c));
 	get_map(textures, &line);
 }
+void parse_plr(t_textures *textures)
+{
+	int i;
+	int j;
+
+	i = -1;
+	j = -1;
+	while (textures->map[++i])
+	{
+		while (textures->map[i][++j])
+		{
+			if (textures->map[i][j] == 'N')
+			{
+				if (textures->plr.dir.y != -2)//допилить вывод ошибкиб выход
+					ft_putstr_fd("Too many args", 1);
+				textures->plr.dir.x = 0;
+				textures->plr.dir.y = -1;
+			}
+			else if (textures->map[i][j] == 'S')
+			{
+				if (textures->plr.dir.y != -2)//допилить вывод ошибкиб выход
+					ft_putstr_fd("Too many args", 1);
+				textures->plr.dir.x = 0;
+				textures->plr.dir.y = 1;
+				textures->plr.pos.y = i;
+				textures->plr.pos.x = j;
+			}
+			else if (textures->map[i][j] == 'E')
+			{
+				if (textures->plr.dir.y != -2)//допилить вывод ошибкиб выход
+					ft_putstr_fd("Too many args", 1);
+				textures->plr.dir.x = -1;
+				textures->plr.dir.y = 0;
+				textures->plr.pos.y = i;
+				textures->plr.pos.x = j;
+			}
+			else if (textures->map[i][j] == 'W')
+			{
+				if (textures->plr.dir.y != -2)//допилить вывод ошибкиб выход
+					ft_putstr_fd("Too many args", 1);
+				textures->plr.dir.x = 1;
+				textures->plr.dir.y = 0;
+				textures->plr.pos.y = i;
+				textures->plr.pos.x = j;
+			}
+			else if (textures->map[i][j] == '2' || textures->map[i][j] == '0' || textures->map[i][j] == '1')
+				ft_putstr_fd("", 0);
+			else
+			{
+				//Invalid arg, exit
+			}
+
+		}
+	}
+}
 int open_file(char *file, t_textures *textures)
 {
     int fd;
@@ -101,6 +157,7 @@ int open_file(char *file, t_textures *textures)
         free(line);
     }
     close(fd);
+    parse_plr(textures);
     if (!(check_valid(*textures)))
         return (0);
     return (1);

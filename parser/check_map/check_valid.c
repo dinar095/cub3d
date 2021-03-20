@@ -1,4 +1,4 @@
-#include "../ft_parser.h"
+#include "../../game/ft_game.h"
 
 static int check_map_wide(char **map, int i, int j)
 {
@@ -45,23 +45,23 @@ static int check_map_height(char **map, int i, int j)
 }
 int	check_valid(t_textures textures)
 {
-    char **map;
+    char **m;
     int i;
     int j;
     int flag;
 
     flag = 1;
     i = -1;
-    map = textures.map;
-    while (flag == 1 && map[++i])//проверяем построчно верность
+    m = textures.map;
+    while (flag == 1 && m[++i])//проверяем построчно верность
     {
         j = -1;
-        while (flag == 1 && map[i][++j])
-            if (map[i][j] == '0')
+        while (flag == 1 && m[i][++j])
+            if (m[i][j] == '0' || m[i][j] == '2' || m[i][j] == 'N' || m[i][j] == 'S' || m[i][j] == 'E' || m[i][j] == 'W')
             {
-                flag = check_map_wide(map, i, j);//Если на какой-то строке флаг = 0, то выходим из цикла
+                flag = check_map_wide(m, i, j);//Если на какой-то строке флаг = 0, то выходим из цикла
                 if (flag)
-                    flag = check_map_height(map, i, j);
+                    flag = check_map_height(m, i, j);
             }
     }
     return (flag);

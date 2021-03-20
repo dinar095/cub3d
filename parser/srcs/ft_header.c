@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ft_parser.h"
+#include "../../game/ft_game.h"
 
 void	get_num_fromline(t_textures *textures, char **line)
 {

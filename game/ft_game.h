@@ -6,13 +6,18 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/20 18:02:47 by desausag         ###   ########.fr       */
+/*   Updated: 2021/03/20 18:44:28 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_GAME_H
 # define FT_GAME_H
-# include "../parser/ft_parser.h"
+# include <fcntl.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include "../parser/gnl/get_next_line.h"
+# include "../../libft/libft.h"
 # include <math.h>
 
 # define SCALE 5
@@ -86,9 +91,22 @@ typedef struct	s_plr //структура для игрока и луча
 {
 	t_cord		pos;
 	t_cord		dir;
-	float		start;
-	float		end;
 }				t_plr;
+
+typedef struct	s_textures
+{
+	int		width;
+	int		height;
+	char	*no;
+	char	*so;
+	char	*we;
+	char	*ea;
+	char	*s;
+	int		f;
+	int		c;
+	char	**map;
+	t_plr 	plr;
+}				t_textures;
 
 typedef struct	s_all // структура для всего вместе
 {
@@ -98,6 +116,14 @@ typedef struct	s_all // структура для всего вместе
 	char		**map;
 	t_textures	textures;
 }				  t_all;
+
+void			get_num_fromline(t_textures *textures, char **line);
+void			get_char_fromline(char **line, char **texture);
+int				create_trgb(int t, int r, int g, int b);
+void			get_color_fromline(char **line, int *n);
+int				check_header(t_textures *textures);
+int             check_valid(t_textures textures);
+int             open_file(char *file, t_textures *textures);
 int				is_wall_cord(char **map,t_cord dot, t_cord ray);
 void			scale_pix(t_all *all, char **map);
 void			init_img(t_all *all);

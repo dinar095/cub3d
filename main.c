@@ -242,11 +242,11 @@ int main(int argc, char **argv) {
     if (!open_file(argv[1], &textures))
         return (0);
     all.textures = textures;
-
-	all.plr.pos.x = 10;
-	all.plr.pos.y = 5;
-	all.plr.dir.x = 0;
-	all.plr.dir.y = -1;
+	all.plr = textures.plr;
+//	all.plr.pos.x = 10;
+//	all.plr.pos.y = 5;
+//	all.plr.dir.x = 0;
+//	all.plr.dir.y = -1;
 
 	all.win = &img;
 
