@@ -1,8 +1,8 @@
 R 1200 900
 NO ./textures/bricks.xpm
 SO ./textures/woolsnow.xpm
-WE ./textures/woolsnow.xpm
-EA ./path_to_the_east_texture
+WE ./textures/sand.xpm
+EA ./textures/glass.xpm
 S ./path_to_the_sprite_texture
 F 220,100,0
 C 225,30,0

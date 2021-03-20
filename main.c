@@ -78,6 +78,7 @@ void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x,
 	double k;
 	int tmp1;
 	int tmp2;
+	int wall;
 
 	printf("%d\n", side);
 	i = 0;
@@ -91,17 +92,24 @@ void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x,
 	{
 		if (i >= y0  && i <= y1) //смотрим по высоте
 		{
-			if (side == 1)
+			tmp2 = (int) (k * (i - y0));
+			if (side == 1)//NO&&SO
 			{
-				tmp1 = (int) ((cross.x - floor(cross.x)) * all->txre_img[side].w);
-				tmp2 = (int) (k * (i - y0));
+				if (ray.y > 0)
+					wall = 1;
+				else
+					wall = 0;
+				tmp1 = (int)((cross.x - floor(cross.x)) * all->txre_img[wall].w);
 			}
-			else if (side == 0)
+			else if (side == 0)//we ea
 			{
-				tmp1 = (int) ((cross.y - floor(cross.y)) * all->txre_img[side].w);
-				tmp2 = (int) (k * (i - y0));
+				if (ray.x > 0)
+					wall = 3;
+				else
+					wall = 2;
+				tmp1 = (int)((cross.y - floor(cross.y)) * all->txre_img[wall].w);
 			}
-			color = get_color(all->txre_img[side], tmp1, tmp2); //достать пиксель
+			color = get_color(all->txre_img[wall], tmp1, tmp2); //достать пиксель
 			my_mlx_pixel_put(all, x, i, color);
 		}
 		if (i < y0)
@@ -118,8 +126,9 @@ void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x,
 void init_texture(t_all *all)
 {
 	all->txre_img[0].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.no, &all->txre_img[0].w, &all->txre_img[0].h);
-
 	all->txre_img[1].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.so, &all->txre_img[1].w, &all->txre_img[1].h);
+	all->txre_img[2].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.we, &all->txre_img[2].w, &all->txre_img[2].h);
+	all->txre_img[3].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.ea, &all->txre_img[3].w, &all->txre_img[3].h);
 }//need free pa
 
 void draw_screen(t_all *all)
