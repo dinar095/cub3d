@@ -42,7 +42,7 @@ unsigned int get_color(t_data txre_img, int x, int y)
 {
 	char *dst;
 	txre_img.addr = mlx_get_data_addr(txre_img.img, &txre_img.bpp, &txre_img.line_l, &txre_img.endian);
-	if (x > 0 && y > 0 && x <= 64 && y <= 64) //допилисть
+	if (x >= 0 && y >= 0 && x <= txre_img.w && y <= txre_img.h)
 	{
 		dst = txre_img.addr + (y * txre_img.line_l + x * (txre_img.bpp / 8));
 		return (*(unsigned int *) dst);
@@ -76,24 +76,38 @@ void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x,
 	double i;
 	unsigned int color;
 	double k;
+	int tmp1;
+	int tmp2;
 
-//printf("%d\n", side);
+	printf("%d\n", side);
 	i = 0;
 	d_to_wall = len_ray(plr, cross) * angle(all->plr.dir, ray);
 
-	h = textures.height/(d_to_wall);
+	h = textures.height/(d_to_wall);  // line height
 	y0 = textures.height/2 - h/2;
 	y1 = textures.height/2 + h/2;
 	k = all->txre_img[side].h / h;
 	while (i <= textures.height)
 	{
-		if (i >= y0 && i <= y1)
+		if (i >= y0  && i <= y1) //смотрим по высоте
 		{
-			int tmp1 = (int)((cross.x - floor(cross.x))*64);
-			int tmp2 = (int)(k*(i-y0));
-			color = get_color(all->txre_img[side], tmp1, tmp2);
+			if (side == 1)
+			{
+				tmp1 = (int) ((cross.x - floor(cross.x)) * all->txre_img[side].w);
+				tmp2 = (int) (k * (i - y0));
+			}
+			else if (side == 0)
+			{
+				tmp1 = (int) ((cross.y - floor(cross.y)) * all->txre_img[side].w);
+				tmp2 = (int) (k * (i - y0));
+			}
+			color = get_color(all->txre_img[side], tmp1, tmp2); //достать пиксель
 			my_mlx_pixel_put(all, x, i, color);
 		}
+		if (i < y0)
+			my_mlx_pixel_put(all, x, i, 0xAFEEEE);
+		if (i > y1)
+			my_mlx_pixel_put(all, x, i, 0xCD853F);
 //		else
 //			my_mlx_pixel_put(all, x, i, 0x00bfff);
 		i++;
@@ -148,12 +162,11 @@ void draw_screen(t_all *all)
 				side = 1;
                 dot_b = fwd_pnt(ray, dot_b, -1);
 			}
-			my_mlx_pixel_put(all, cross.x * SCALE, cross.y * SCALE, 0xFF1010);
+			my_mlx_pixel_put(all, cross.x * SCALE, cross.y * SCALE, 0xFF10100);
 		}
 		print_wall(all->plr.pos, cross, all->textures, all, i, ray, side);
         ray = rotateZ(ray, (angel)/all->textures.width);
 		i++;
-
 	}
 	mlx_put_image_to_window(all->win->mlx, all->win->mlx_win, all->win->img, 0, 0);
 }
@@ -163,49 +176,32 @@ int             key_hook(int keycode, t_all *all)
 {
    // printf("Keycode: %d\n", keycode);
    t_cord tmp;
-    if (keycode == W)
+   t_cord nDir;
+    if (keycode == W || keycode == S)
 	{
-    	tmp.x = all->plr.pos.x + all->plr.dir.x * 0.5;
-    	tmp.y = all->plr.pos.y + all->plr.dir.y * 0.5;
-    	if (!(is_wall_cord(all->map, tmp, all->plr.dir)))
+    	if (keycode == W)
     	{
-			all->plr.pos.x += all->plr.dir.x * 0.5;
-			all->plr.pos.y += all->plr.dir.y * 0.5;
+			tmp.x = all->plr.pos.x + all->plr.dir.x * 0.5;
+			tmp.y = all->plr.pos.y + all->plr.dir.y * 0.5;
 		}
-	}
-	if (keycode == S)
-	{
-		tmp.x = all->plr.pos.x - all->plr.dir.x * 0.5;
-		tmp.y = all->plr.pos.y - all->plr.dir.y * 0.5;
-		if (!(is_wall_cord(all->map, tmp, all->plr.dir)))
+    	else
 		{
-			all->plr.pos.x -= all->plr.dir.x * 0.5;
-			all->plr.pos.y -= all->plr.dir.y * 0.5;
+			tmp.x = all->plr.pos.x - all->plr.dir.x * 0.5;
+			tmp.y = all->plr.pos.y - all->plr.dir.y * 0.5;
 		}
+    	if (!(is_wall_cord(all->map, tmp, all->plr.dir)))
+			all->plr.pos = tmp;
 	}
-	if (keycode == A)
+	if (keycode == A || keycode == D)
 	{
-		t_cord	nDir;
-		nDir = rotateZ(all->plr.dir, -90);
+		if (keycode == A)
+			nDir = rotateZ(all->plr.dir, -90);
+		else
+			nDir = rotateZ(all->plr.dir, 90);
 		tmp.x = all->plr.pos.x + nDir.x * 0.5;
 		tmp.y = all->plr.pos.y + nDir.y * 0.5;
 		if (!(is_wall_cord(all->map, tmp, nDir)))
-		{
-			all->plr.pos.x += nDir.x * 0.5;
-			all->plr.pos.y += nDir.y * 0.5;
-		}
-	}
-	if (keycode == D)
-	{
-		t_cord	nDir;
-		nDir = rotateZ(all->plr.dir, 90);
-		tmp.x = all->plr.pos.x + nDir.x * 0.5;
-		tmp.y = all->plr.pos.y + nDir.y * 0.5;
-		if (!(is_wall_cord(all->map, tmp, nDir)))
-		{
-			all->plr.pos.x += nDir.x * 0.5;
-			all->plr.pos.y += nDir.y * 0.5;
-		}
+			all->plr.pos = tmp;
 	}
 	if (keycode == LEFT)
 		all->plr.dir = rotateZ(all->plr.dir, -5);
@@ -215,7 +211,6 @@ int             key_hook(int keycode, t_all *all)
 		exit(EXIT_SUCCESS);
 //	mlx_hook(all->win->mlx_win, 2, 1L<<0, key_hook, &all);
     draw_screen(all);
-
 }
 
 int main(int argc, char **argv) {

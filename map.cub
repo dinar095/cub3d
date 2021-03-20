@@ -1,7 +1,7 @@
 R 1200 900
-NO ./textures/sand.xpm
-SO ./textures/bricks.xpm
-WE ./path_to_the_west_texture
+NO ./textures/bricks.xpm
+SO ./textures/woolsnow.xpm
+WE ./textures/woolsnow.xpm
 EA ./path_to_the_east_texture
 S ./path_to_the_sprite_texture
 F 220,100,0
