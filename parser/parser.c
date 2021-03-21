@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/21 11:46:57 by desausag         ###   ########.fr       */
+/*   Updated: 2021/03/21 13:00:24 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	parse_plr(t_textures *textures)
 		j = -1;
 		while (textures->map[i][++j])
 		{
-			if (ft_strchr("NSEW201", textures->map[i][j]))
+			if (ft_strchr("NSEW01", textures->map[i][j]))
 			{
 				if (ft_strchr("NSWE", textures->map[i][j]) && textures->plr.dir.y != -2)
 				exit (1);
@@ -115,7 +115,7 @@ void	parse_plr(t_textures *textures)
 				else if (textures->map[i][j] == 'W')
 					cr_pos(textures, 1, 0, i, j);
 			}
-			if (textures->map[i][j] == '2')
+			else if (textures->map[i][j] == '2')
 			{
 				textures->spr.y = i;
 				textures->spr.x = j;

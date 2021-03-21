@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/21 12:36:00 by desausag         ###   ########.fr       */
+/*   Updated: 2021/03/21 12:55:39 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,4 +134,10 @@ t_cord			crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b);
 double			angle(t_cord begin, t_cord end);
 t_cord			rotateZ(t_cord vector,double angle);
 double			len_ray(t_cord ray1, t_cord ray2);
+unsigned int	get_color(t_data txre_img, int x, int y);
+t_cord			net_point(t_cord ray, t_cord pos);
+void			init_texture(t_all *all);
+t_cord			fwd_pnt(t_cord ray, t_cord pnt, int flag);
+int				key_hook(int keycode, t_all *all);
+void			draw_screen(t_all *all);
 #endif //DESAUSAG_FT_GAME_H

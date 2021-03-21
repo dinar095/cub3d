@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/20 18:02:36 by desausag         ###   ########.fr       */
+/*   Updated: 2021/03/21 15:40:55 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,59 @@ void            my_mlx_pixel_put(t_all *all, int x, int y, int color)
         dst = all->win->addr + (y * all->win->line_l + x * (all->win->bpp / 8));//
         *(unsigned int *) dst = color;
     }
+}
+
+void init_texture(t_all *all)
+{
+	all->txre_img[0].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.no, &all->txre_img[0].w, &all->txre_img[0].h);
+	all->txre_img[1].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.so, &all->txre_img[1].w, &all->txre_img[1].h);
+	all->txre_img[2].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.we, &all->txre_img[2].w, &all->txre_img[2].h);
+	all->txre_img[3].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.ea, &all->txre_img[3].w, &all->txre_img[3].h);
+	all->txre_img[4].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.s, &all->txre_img[4].w, &all->txre_img[4].h);
+}//need free pa
+
+t_cord net_point(t_cord ray, t_cord pos)
+{
+	t_cord tmp;
+	if (ray.x > 0)
+		tmp.x = ceil(pos.x);
+	if (ray.x <= 0)
+		tmp.x = floor(pos.x);
+	if (ray.y > 0)
+		tmp.y = ceil(pos.y);
+	if (ray.y <= 0)
+		tmp.y = floor(pos.y);
+	return (tmp);
+}
+
+unsigned int get_color(t_data txre_img, int x, int y)
+{
+	char *dst;
+	txre_img.addr = mlx_get_data_addr(txre_img.img, &txre_img.bpp, &txre_img.line_l, &txre_img.endian);
+	if (x >= 0 && y >= 0 && x <= txre_img.w && y <= txre_img.h)
+	{
+		dst = txre_img.addr + (y * txre_img.line_l + x * (txre_img.bpp / 8));
+		return (*(unsigned int *) dst);
+	}
+}
+
+t_cord fwd_pnt(t_cord ray, t_cord pnt, int flag)
+{
+	if (flag > 0)
+	{
+		if (ray.x > 0)
+			pnt.x++;
+		if (ray.x < 0)
+			pnt.x--;
+	}
+	else
+	{
+		if (ray.y > 0)
+			pnt.y++;
+		if (ray.y < 0)
+			pnt.y--;
+	}
+	return (pnt);
 }
 
 double len_ray(t_cord ray1, t_cord ray2)
@@ -46,6 +99,49 @@ int is_wall_cord(char **map,t_cord dot, t_cord ray)
         return 1;
 }
 
+int is_sprit(char **map, t_cord dot, t_cord ray)
+{}
+
+int             key_hook(int keycode, t_all *all)
+{
+	// printf("Keycode: %d\n", keycode);
+	t_cord tmp;
+	t_cord nDir;
+	if (keycode == W || keycode == S)
+	{
+		if (keycode == W)
+		{
+			tmp.x = all->plr.pos.x + all->plr.dir.x * 0.5;
+			tmp.y = all->plr.pos.y + all->plr.dir.y * 0.5;
+		}
+		else
+		{
+			tmp.x = all->plr.pos.x - all->plr.dir.x * 0.5;
+			tmp.y = all->plr.pos.y - all->plr.dir.y * 0.5;
+		}
+		if (!(is_wall_cord(all->map, tmp, all->plr.dir)))
+			all->plr.pos = tmp;
+	}
+	if (keycode == A || keycode == D)
+	{
+		if (keycode == A)
+			nDir = rotateZ(all->plr.dir, -90);
+		else
+			nDir = rotateZ(all->plr.dir, 90);
+		tmp.x = all->plr.pos.x + nDir.x * 0.5;
+		tmp.y = all->plr.pos.y + nDir.y * 0.5;
+		if (!(is_wall_cord(all->map, tmp, nDir)))
+			all->plr.pos = tmp;
+	}
+	if (keycode == LEFT)
+		all->plr.dir = rotateZ(all->plr.dir, -5);
+	if (keycode == RIGHT)
+		all->plr.dir = rotateZ(all->plr.dir, 5);
+	if (keycode == ESC)
+		exit(EXIT_SUCCESS);
+//	mlx_hook(all->win->mlx_win, 2, 1L<<0, key_hook, &all);
+	draw_screen(all);
+}
 
 void scale_pix(t_all *all, char **map)
 {
@@ -61,10 +157,10 @@ void scale_pix(t_all *all, char **map)
 			if (map[y][x] == '1') {
 				i = 0;
 				while (i++ < SCALE) {
-					my_mlx_pixel_put(all, x * SCALE + i, y * SCALE, 0x505050);
+					my_mlx_pixel_put(all, x * SCALE + i, y * SCALE, 0x808080);
 					j = 0;
 					while (j++ < SCALE)
-						my_mlx_pixel_put(all, x * SCALE + i, y * SCALE + j, 0x505050);
+						my_mlx_pixel_put(all, x * SCALE + i, y * SCALE + j, 0x808080);
 				}
 			}
 
