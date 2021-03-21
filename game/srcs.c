@@ -22,6 +22,10 @@ void            my_mlx_pixel_put(t_all *all, int x, int y, int color)
     }
 }
 
+double len_ray(t_cord ray1, t_cord ray2)
+{
+	return (sqrt(pow(ray1.y - ray2.y, 2) + pow(ray1.x - ray2.x, 2)));
+}
 
 
 int is_wall_cord(char **map,t_cord dot, t_cord ray)

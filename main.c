@@ -6,36 +6,15 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:25 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/20 18:02:25 by desausag         ###   ########.fr       */
+/*   Updated: 2021/03/21 12:35:12 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./game/ft_game.h"
 
 
-double len_ray(t_cord ray1, t_cord ray2)
-{
-	return (sqrt(pow(ray1.y - ray2.y, 2) + pow(ray1.x - ray2.x, 2)));
-}
-//void         drop_rays(t_all *all)
-//{
-//    t_ray      ray;
-//    double      cam;
-//
-//    ray.x = 0;
-//    while (ray.x < all->textures.width)
-//    {
-//        //ray.slist = NULL;
-//        cam = 2 * ray.x / (double)all->textures.width - 1;
-//        ray.dir.x = all->plr.dir.x + cam * all->plr.dir.x;
-//        ray.dir.y = all->plr.dir.y + cam * all->plr.dir.y;
-//        count_ray_len(all, &ray);//ПУскаем луч
-//        ray.perp = ray.dist * v_mult(ray.dir, all->player.dir)/v_len(all->player.dir) / v_len(ray.dir);//Избавляемся от фишай
-//        draw_strip(all, &ray);//
-//        ray.x++;
-//    }
-//    draw_sprites(all);
-//}
+
+
 t_cord net_point(t_cord ray, t_cord pos)
 {
     t_cord tmp;
@@ -102,7 +81,7 @@ void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x,
 	k = all->txre_img[side].h / h;
 	while (i <= textures.height)
 	{
-		if (i >= y0  && i <= y1) //смотрим по высоте
+		if (i > y0  && i < y1) //смотрим по высоте
 		{
 			tmp2 = (int) (k * (i - y0));
 			if (side == 1)//NO&&SO
@@ -124,9 +103,9 @@ void print_wall(t_cord plr,t_cord cross, t_textures textures, t_all *all, int x,
 			color = get_color(all->txre_img[wall], tmp1, tmp2); //достать пиксель
 			my_mlx_pixel_put(all, x, i, color);
 		}
-		if (i < y0)
+		if (i <= y0)
 			my_mlx_pixel_put(all, x, i, 0xAFEEEE);
-		if (i > y1)
+		if (i >= y1)
 			my_mlx_pixel_put(all, x, i, 0xCD853F);
 //		else
 //			my_mlx_pixel_put(all, x, i, 0x00bfff);
@@ -141,6 +120,7 @@ void init_texture(t_all *all)
 	all->txre_img[1].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.so, &all->txre_img[1].w, &all->txre_img[1].h);
 	all->txre_img[2].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.we, &all->txre_img[2].w, &all->txre_img[2].h);
 	all->txre_img[3].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.ea, &all->txre_img[3].w, &all->txre_img[3].h);
+	all->txre_img[4].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.s, &all->txre_img[4].w, &all->txre_img[4].h);
 }//need free pa
 
 void draw_screen(t_all *all)
@@ -243,14 +223,7 @@ int main(int argc, char **argv) {
         return (0);
     all.textures = textures;
 	all.plr = textures.plr;
-//	all.plr.pos.x = 10;
-//	all.plr.pos.y = 5;
-//	all.plr.dir.x = 0;
-//	all.plr.dir.y = -1;
-
 	all.win = &img;
-
-
 	all.map = textures.map;
 	img.mlx = mlx_init();
 	img.mlx_win = mlx_new_window(img.mlx, textures.width, textures.height, "Cub3d!");

@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/20 18:44:28 by desausag         ###   ########.fr       */
+/*   Updated: 2021/03/21 12:36:00 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,17 +95,18 @@ typedef struct	s_plr //структура для игрока и луча
 
 typedef struct	s_textures
 {
-	int		width;
-	int		height;
-	char	*no;
-	char	*so;
-	char	*we;
-	char	*ea;
-	char	*s;
-	int		f;
-	int		c;
-	char	**map;
-	t_plr 	plr;
+	int			width;
+	int			height;
+	char		*no;
+	char		*so;
+	char		*we;
+	char		*ea;
+	char		*s;
+	int			f;
+	int			c;
+	char		**map;
+	t_plr 		plr;
+	t_cord		spr;
 }				t_textures;
 
 typedef struct	s_all // структура для всего вместе
@@ -115,15 +116,15 @@ typedef struct	s_all // структура для всего вместе
 	t_plr		plr;
 	char		**map;
 	t_textures	textures;
-}				  t_all;
+}				t_all;
 
 void			get_num_fromline(t_textures *textures, char **line);
 void			get_char_fromline(char **line, char **texture);
 int				create_trgb(int t, int r, int g, int b);
 void			get_color_fromline(char **line, int *n);
 int				check_header(t_textures *textures);
-int             check_valid(t_textures textures);
-int             open_file(char *file, t_textures *textures);
+int				check_valid(t_textures textures);
+int				open_file(char *file, t_textures *textures);
 int				is_wall_cord(char **map,t_cord dot, t_cord ray);
 void			scale_pix(t_all *all, char **map);
 void			init_img(t_all *all);
@@ -132,4 +133,5 @@ void			my_mlx_pixel_put(t_all *all, int x, int y, int color);
 t_cord			crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b);
 double			angle(t_cord begin, t_cord end);
 t_cord			rotateZ(t_cord vector,double angle);
+double			len_ray(t_cord ray1, t_cord ray2);
 #endif //DESAUSAG_FT_GAME_H

@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/20 19:17:58 by desausag         ###   ########.fr       */
+/*   Updated: 2021/03/21 11:46:57 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,57 +83,45 @@ static void	parse_line(char *line, t_textures *textures)
 			get_color_fromline(&line, &(textures->c));
 	get_map(textures, &line);
 }
-void parse_plr(t_textures *textures)
+void 	cr_pos(t_textures *textures, int dirx, int diry, int posy, int posx)
+{
+	textures->plr.dir.x = dirx;
+	textures->plr.dir.y = diry;
+	textures->plr.pos.y = posy;
+	textures->plr.pos.x = posx;
+}
+void	parse_plr(t_textures *textures)
 {
 	int i;
 	int j;
 
 	i = -1;
-	j = -1;
+
 	while (textures->map[++i])
 	{
+		j = -1;
 		while (textures->map[i][++j])
 		{
-			if (textures->map[i][j] == 'N')
+			if (ft_strchr("NSEW201", textures->map[i][j]))
 			{
-				if (textures->plr.dir.y != -2)//допилить вывод ошибкиб выход
-					ft_putstr_fd("Too many args", 1);
-				textures->plr.dir.x = 0;
-				textures->plr.dir.y = -1;
+				if (ft_strchr("NSWE", textures->map[i][j]) && textures->plr.dir.y != -2)
+				exit (1);
+				if (textures->map[i][j] == 'N')
+					cr_pos(textures, 0, -1, i, j);
+				else if (textures->map[i][j] == 'S')
+					cr_pos(textures, 0, 1, i, j);
+				else if (textures->map[i][j] == 'E')
+					cr_pos(textures, -1, 0, i, j);
+				else if (textures->map[i][j] == 'W')
+					cr_pos(textures, 1, 0, i, j);
 			}
-			else if (textures->map[i][j] == 'S')
+			if (textures->map[i][j] == '2')
 			{
-				if (textures->plr.dir.y != -2)//допилить вывод ошибкиб выход
-					ft_putstr_fd("Too many args", 1);
-				textures->plr.dir.x = 0;
-				textures->plr.dir.y = 1;
-				textures->plr.pos.y = i;
-				textures->plr.pos.x = j;
+				textures->spr.y = i;
+				textures->spr.x = j;
 			}
-			else if (textures->map[i][j] == 'E')
-			{
-				if (textures->plr.dir.y != -2)//допилить вывод ошибкиб выход
-					ft_putstr_fd("Too many args", 1);
-				textures->plr.dir.x = -1;
-				textures->plr.dir.y = 0;
-				textures->plr.pos.y = i;
-				textures->plr.pos.x = j;
-			}
-			else if (textures->map[i][j] == 'W')
-			{
-				if (textures->plr.dir.y != -2)//допилить вывод ошибкиб выход
-					ft_putstr_fd("Too many args", 1);
-				textures->plr.dir.x = 1;
-				textures->plr.dir.y = 0;
-				textures->plr.pos.y = i;
-				textures->plr.pos.x = j;
-			}
-			else if (textures->map[i][j] == '2' || textures->map[i][j] == '0' || textures->map[i][j] == '1')
-				ft_putstr_fd("", 0);
 			else
-			{
-				//Invalid arg, exit
-			}
+				exit(1);//Invalid arg, exit
 
 		}
 	}
