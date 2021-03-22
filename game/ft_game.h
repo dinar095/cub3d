@@ -74,6 +74,7 @@ typedef struct	s_data
 	int			endian;
 	int 		w;
 	int			h;
+	double 		y;
 }               t_data;
 
 typedef struct	s_ray
