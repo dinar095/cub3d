@@ -87,16 +87,31 @@ void 	cr_pos(t_textures *textures, int dirx, int diry, int posy, int posx)
 {
 	textures->plr.dir.x = dirx;
 	textures->plr.dir.y = diry;
-	textures->plr.pos.y = posy;
-	textures->plr.pos.x = posx;
+	textures->plr.pos.y = posy + 0.5;
+	textures->plr.pos.x = posx + 0.5;
 }
-void	parse_plr(t_textures *textures)
+void	mem_sprt(t_all *all, t_cord *art, int w)
 {
 	int i;
-	int j;
 
 	i = -1;
 
+	all->sprite = (t_sprite *)malloc(sizeof(t_sprite) * w);
+	while (++i < w)
+	{
+		all->sprite[i].pos = art[i];
+		all->sprite[i].co = w;
+	}
+}
+void	parse_plr(t_textures *textures, t_all *all)
+{
+	int i;
+	int j;
+	int w;
+	t_cord art[500];
+
+	i = -1;
+	w = 0;
 	while (textures->map[++i])
 	{
 		j = -1;
@@ -116,17 +131,15 @@ void	parse_plr(t_textures *textures)
 					cr_pos(textures, 1, 0, i, j);
 			}
 			else if (textures->map[i][j] == '2')
-			{
-				textures->spr.y = i;
-				textures->spr.x = j;
-			}
+				art[w++] = v_set(j + 0.5, i + 0.5);
 			else
 				exit(1);//Invalid arg, exit
-
 		}
 	}
+	mem_sprt(all, art, w);
+
 }
-int open_file(char *file, t_textures *textures)
+int open_file(char *file, t_textures *textures, t_all *all)
 {
     int fd;
     char *line;
@@ -145,7 +158,7 @@ int open_file(char *file, t_textures *textures)
         free(line);
     }
     close(fd);
-    parse_plr(textures);
+    parse_plr(textures, all);
     if (!(check_valid(*textures)))
         return (0);
     return (1);
