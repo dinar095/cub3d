@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/21 15:40:55 by desausag         ###   ########.fr       */
+/*   Updated: 2021/03/25 22:15:09 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@ void            my_mlx_pixel_put(t_all *all, int x, int y, int color)
 {
 	char    *dst;
 
-	if (x > 0 && y > 0 && x < 1600 && y < 900)//допилить
+	if (x > 0 && y > 0 && x < all->textures.width && y < all->textures.height)//допилить
 	{
-        dst = all->win->addr + (y * all->win->line_l + x * (all->win->bpp / 8));//
+        dst = all->win.addr + (y * all->win.line_l + x * (all->win.bpp / 8));//
         *(unsigned int *) dst = color;
     }
 }
 
 void init_texture(t_all *all)
 {
-	all->txre_img[0].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.no, &all->txre_img[0].w, &all->txre_img[0].h);
-	all->txre_img[1].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.so, &all->txre_img[1].w, &all->txre_img[1].h);
-	all->txre_img[2].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.we, &all->txre_img[2].w, &all->txre_img[2].h);
-	all->txre_img[3].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.ea, &all->txre_img[3].w, &all->txre_img[3].h);
-	all->txre_img[4].img = mlx_xpm_file_to_image(all->win->mlx, all->textures.s, &all->txre_img[4].w, &all->txre_img[4].h);
+	all->txre_img[0].img = mlx_xpm_file_to_image(all->win.mlx, all->textures.no, &all->txre_img[0].w, &all->txre_img[0].h);
+	all->txre_img[1].img = mlx_xpm_file_to_image(all->win.mlx, all->textures.so, &all->txre_img[1].w, &all->txre_img[1].h);
+	all->txre_img[2].img = mlx_xpm_file_to_image(all->win.mlx, all->textures.we, &all->txre_img[2].w, &all->txre_img[2].h);
+	all->txre_img[3].img = mlx_xpm_file_to_image(all->win.mlx, all->textures.ea, &all->txre_img[3].w, &all->txre_img[3].h);
+	all->txre_img[4].img = mlx_xpm_file_to_image(all->win.mlx, all->textures.s, &all->txre_img[4].w, &all->txre_img[4].h);
 }//need free pa
 
 t_cord net_point(t_cord ray, t_cord pos)
@@ -139,7 +139,7 @@ int             key_hook(int keycode, t_all *all)
 		all->plr.dir = rotateZ(all->plr.dir, 5);
 	if (keycode == ESC)
 		exit(EXIT_SUCCESS);
-//	mlx_hook(all->win->mlx_win, 2, 1L<<0, key_hook, &all);
+//	mlx_hook(all->win.mlx_win, 2, 1L<<0, key_hook, &all);
 	draw_screen(all);
 }
 
@@ -178,9 +178,9 @@ void scale_pix(t_all *all, char **map)
 }
 void    init_img(t_all *all)
 {
-	all->win->img= mlx_new_image(all->win->mlx, all->textures.width, all->textures.height);
-	all->win->addr = mlx_get_data_addr(all->win->img, &(all->win->bpp),&(all->win->line_l),
-								  &(all->win->endian));
+	all->win.img= mlx_new_image(all->win.mlx, all->textures.width, all->textures.height);
+	all->win.addr = mlx_get_data_addr(all->win.img, &(all->win.bpp),&(all->win.line_l),
+								  &(all->win.endian));
 }
 
 t_cord   crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)//точка пересечения по точке и вектору

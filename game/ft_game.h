@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/21 12:55:39 by desausag         ###   ########.fr       */
+/*   Updated: 2021/03/25 22:05:42 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ typedef struct s_sprite
 }				t_sprite;
 typedef struct	s_all // структура для всего вместе
 {
-	t_data		*win;
+	t_data		win;
 	t_data		txre_img[5];
 	t_plr		plr;
 	char		**map;
