@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/25 19:27:25 by desausag         ###   ########.fr       */
+/*   Updated: 2021/03/21 12:55:39 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include "../parser/gnl/get_next_line.h"
-# include "../../libft/libft.h"
+# include "../libft/libft.h"
 # include <math.h>
 
 # define SCALE 5
@@ -109,7 +109,17 @@ typedef struct	s_textures
 	t_plr 		plr;
 	t_cord		spr;
 }				t_textures;
+typedef struct s_sprite
+{
+	t_cord	pos;
+	double	h;
+	double	w;
+	int 	cent;
+	double 	dist;
+	int 	co;
+	int		vis;
 
+}				t_sprite;
 typedef struct	s_all // структура для всего вместе
 {
 	t_data		*win;
@@ -117,6 +127,8 @@ typedef struct	s_all // структура для всего вместе
 	t_plr		plr;
 	char		**map;
 	t_textures	textures;
+	t_sprite 	*sprite;
+	t_cord		ray0;
 }				t_all;
 
 void			get_num_fromline(t_textures *textures, char **line);
@@ -125,7 +137,7 @@ int				create_trgb(int t, int r, int g, int b);
 void			get_color_fromline(char **line, int *n);
 int				check_header(t_textures *textures);
 int				check_valid(t_textures textures);
-int				open_file(char *file, t_textures *textures);
+int				open_file(char *file, t_textures *textures, t_all *all);
 int				is_wall_cord(char **map,t_cord dot, t_cord ray);
 void			scale_pix(t_all *all, char **map);
 void			init_img(t_all *all);
