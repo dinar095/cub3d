@@ -21,6 +21,7 @@
 # include <math.h>
 
 # define SCALE 5
+# define VIEW 46
 
 # ifdef __linux__
 # include "../linminilibx/mlx.h"
@@ -127,7 +128,7 @@ typedef struct	s_all // структура для всего вместе
 	t_plr		plr;
 	char		**map;
 	t_textures	textures;
-	t_sprite 	*sprite;
+	t_sprite 	*sprt;
 	t_cord		ray0;
 }				t_all;
 
@@ -154,4 +155,7 @@ t_cord			fwd_pnt(t_cord ray, t_cord pnt, int flag);
 int				key_hook(int keycode, t_all *all);
 void			draw_screen(t_all *all);
 t_cord 			v_set(double val_x, double val_y);
+t_cord			sprite(t_cord cross, t_all *all, t_cord ray);
+t_cord			is_sprite(char **map,t_cord dot, t_cord ray);
+void			init_sprite(t_all *all,t_cord cross);
 #endif //DESAUSAG_FT_GAME_H

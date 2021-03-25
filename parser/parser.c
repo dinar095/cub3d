@@ -96,11 +96,11 @@ void	mem_sprt(t_all *all, t_cord *art, int w)
 
 	i = -1;
 
-	all->sprite = (t_sprite *)malloc(sizeof(t_sprite) * w);
+	all->sprt = (t_sprite *)malloc(sizeof(t_sprite) * w);
 	while (++i < w)
 	{
-		all->sprite[i].pos = art[i];
-		all->sprite[i].co = w;
+		all->sprt[i].pos = art[i];
+		all->sprt[i].co = w;
 	}
 }
 void	parse_plr(t_textures *textures, t_all *all)
