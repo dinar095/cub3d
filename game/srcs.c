@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/25 22:15:09 by desausag         ###   ########.fr       */
+/*   Updated: 2021/03/31 21:35:55 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,31 @@ int is_wall_cord(char **map,t_cord dot, t_cord ray)
         return 1;
 }
 
-int is_sprit(char **map, t_cord dot, t_cord ray)
-{}
+t_cord 			v_set(double val_x, double val_y)
+{
+	t_cord		res;
+	res.x = val_x;
+	res.y = val_y;
+	return (res);
+}
 
+t_cord is_sprite(char **map,t_cord dot, t_cord ray)
+{
+	int x;
+	int y;
+	if (ray.x < 0)
+		x = (int)ceil(dot.x) - 1;
+	else
+		x =(int)dot.x;
+	if (ray.y <= 0)
+		y = (int)ceil(dot.y) - 1;
+	else
+		y = (int)dot.y;
+	if (map[y][x] == '2')
+		return v_set(x, y);
+	else
+		return (v_set(-1,-1));
+}
 int             key_hook(int keycode, t_all *all)
 {
 	// printf("Keycode: %d\n", keycode);
@@ -213,60 +235,14 @@ t_cord   crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)//точка пер�
 	dot_c.y = dot_b.y - n * b.y;
 	return (dot_c);
 }
-void	init_sprite(t_all *all,t_cord cross)
+void	null_sprites(t_all *all)
 {
 	int i;
-	t_cord vec;
-	double ugol;
-	int		znak;
+
 
 	i = -1;
-	while (++i < all->sprt->co)
-	{
-		if ((int)all->sprt[i].pos.x == (int)cross.x && (int)all->sprt[i].pos.y == (int)cross.y
-			&& all->sprt[i].vis == 0)
-		{
-			all->sprt[i].vis = 1;
-			vec = v_set(all->sprt[i].pos.x - all->plr.pos.x, all->sprt[i].pos.y - all->plr.pos.y);
-			znak = all->ray0.x * vec.y - all->ray0.y * vec.x < 0 ? -1 : 1;
-			ugol = acos(angle(all->ray0, vec)) * znak * 180 / M_PI;
-			all->sprt[i].cent = ugol / 46 * all->textures.width;
-		}
-	}
-}
-t_cord is_sprite(char **map,t_cord dot, t_cord ray)
-{
-	int x;
-	int y;
-	if (ray.x < 0)
-		x = (int)ceil(dot.x) - 1;
-	else
-		x =(int)dot.x;
-	if (ray.y <= 0)
-		y = (int)ceil(dot.y) - 1;
-	else
-		y = (int)dot.y;
-	if (map[y][x] == '2')
-		return v_set(x, y);
-	else
-		return (v_set(-1,-1));
-}
-t_cord sprite(t_cord cross, t_all *all, t_cord ray)
-{
-	t_cord center;
-	t_cord sDir;
-	t_cord r_x_s;
-	center = v_set(floor(cross.x) + 0.5, floor(cross.y));
-	sDir = rotateZ(all->plr.dir, -90);
-	r_x_s = crc(sDir, ray, center, all->plr.pos);
-	return (v_set(len_ray(r_x_s, center), all->textures.width / len_ray(center, all->plr.pos)));
-}
-t_cord 			v_set(double val_x, double val_y)
-{
-	t_cord		res;
-	res.x = val_x;
-	res.y = val_y;
-	return (res);
+	while (++i < all->sprite->co)
+		all->sprite[i].vis = 0;
 }
 double angle(t_cord begin, t_cord end)
 {

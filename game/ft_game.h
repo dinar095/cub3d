@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/25 22:05:42 by desausag         ###   ########.fr       */
+/*   Updated: 2021/03/31 21:35:55 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include <math.h>
 
 # define SCALE 5
-# define VIEW 46
 
 # ifdef __linux__
 # include "../linminilibx/mlx.h"
@@ -128,7 +127,7 @@ typedef struct	s_all // структура для всего вместе
 	t_plr		plr;
 	char		**map;
 	t_textures	textures;
-	t_sprite 	*sprt;
+	t_sprite 	*sprite;
 	t_cord		ray0;
 }				t_all;
 
@@ -155,7 +154,6 @@ t_cord			fwd_pnt(t_cord ray, t_cord pnt, int flag);
 int				key_hook(int keycode, t_all *all);
 void			draw_screen(t_all *all);
 t_cord 			v_set(double val_x, double val_y);
-t_cord			sprite(t_cord cross, t_all *all, t_cord ray);
 t_cord			is_sprite(char **map,t_cord dot, t_cord ray);
-void			init_sprite(t_all *all,t_cord cross);
+void			null_sprites(t_all *all);
 #endif //DESAUSAG_FT_GAME_H

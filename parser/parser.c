@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/21 13:00:24 by desausag         ###   ########.fr       */
+/*   Updated: 2021/03/31 19:01:02 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,11 @@ void	mem_sprt(t_all *all, t_cord *art, int w)
 
 	i = -1;
 
-	all->sprt = (t_sprite *)malloc(sizeof(t_sprite) * w);
+	all->sprite = (t_sprite *)malloc(sizeof(t_sprite) * w);
 	while (++i < w)
 	{
-		all->sprt[i].pos = art[i];
-		all->sprt[i].co = w;
+		all->sprite[i].pos = art[i];
+		all->sprite[i].co = w;
 	}
 }
 void	parse_plr(t_textures *textures, t_all *all)
