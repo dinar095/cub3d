@@ -133,13 +133,13 @@ int             key_hook(int keycode, t_all *all)
 	{
 		if (keycode == W)
 		{
-			tmp.x = all->plr.pos.x + all->plr.dir.x * SPEED;
-			tmp.y = all->plr.pos.y + all->plr.dir.y * SPEED;
+			tmp.x = all->plr.pos.x + all->plr.dir.x * SPD;
+			tmp.y = all->plr.pos.y + all->plr.dir.y * SPD;
 		}
 		else
 		{
-			tmp.x = all->plr.pos.x - all->plr.dir.x * SPEED;
-			tmp.y = all->plr.pos.y - all->plr.dir.y * SPEED;
+			tmp.x = all->plr.pos.x - all->plr.dir.x * SPD;
+			tmp.y = all->plr.pos.y - all->plr.dir.y * SPD;
 		}
 		if (!(is_wall_cord(all->map, tmp, all->plr.dir)))
 			all->plr.pos = tmp;
@@ -150,8 +150,8 @@ int             key_hook(int keycode, t_all *all)
 			nDir = rotateZ(all->plr.dir, -90);
 		else
 			nDir = rotateZ(all->plr.dir, 90);
-		tmp.x = all->plr.pos.x + nDir.x * SPEED;
-		tmp.y = all->plr.pos.y + nDir.y * SPEED;
+		tmp.x = all->plr.pos.x + nDir.x * SPD;
+		tmp.y = all->plr.pos.y + nDir.y * SPD;
 		if (!(is_wall_cord(all->map, tmp, nDir)))
 			all->plr.pos = tmp;
 	}

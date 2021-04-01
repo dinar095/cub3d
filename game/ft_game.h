@@ -20,7 +20,7 @@
 # include "../libft/libft.h"
 # include <math.h>
 
-# define SPEED 0.49
+# define SPD 0.49
 
 # ifdef __linux__
 # include "../linminilibx/mlx.h"
