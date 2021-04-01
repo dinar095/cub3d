@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/31 21:35:55 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/01 20:58:17 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include "../libft/libft.h"
 # include <math.h>
 
-# define SCALE 5
+# define SPEED 0.49
 
 # ifdef __linux__
 # include "../linminilibx/mlx.h"

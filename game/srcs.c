@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/31 21:35:55 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/01 20:51:11 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,20 +126,20 @@ t_cord is_sprite(char **map,t_cord dot, t_cord ray)
 }
 int             key_hook(int keycode, t_all *all)
 {
-	// printf("Keycode: %d\n", keycode);
 	t_cord tmp;
 	t_cord nDir;
+	tmp = v_set(0,0);
 	if (keycode == W || keycode == S)
 	{
 		if (keycode == W)
 		{
-			tmp.x = all->plr.pos.x + all->plr.dir.x * 0.5;
-			tmp.y = all->plr.pos.y + all->plr.dir.y * 0.5;
+			tmp.x = all->plr.pos.x + all->plr.dir.x * SPEED;
+			tmp.y = all->plr.pos.y + all->plr.dir.y * SPEED;
 		}
 		else
 		{
-			tmp.x = all->plr.pos.x - all->plr.dir.x * 0.5;
-			tmp.y = all->plr.pos.y - all->plr.dir.y * 0.5;
+			tmp.x = all->plr.pos.x - all->plr.dir.x * SPEED;
+			tmp.y = all->plr.pos.y - all->plr.dir.y * SPEED;
 		}
 		if (!(is_wall_cord(all->map, tmp, all->plr.dir)))
 			all->plr.pos = tmp;
@@ -150,54 +150,19 @@ int             key_hook(int keycode, t_all *all)
 			nDir = rotateZ(all->plr.dir, -90);
 		else
 			nDir = rotateZ(all->plr.dir, 90);
-		tmp.x = all->plr.pos.x + nDir.x * 0.5;
-		tmp.y = all->plr.pos.y + nDir.y * 0.5;
+		tmp.x = all->plr.pos.x + nDir.x * SPEED;
+		tmp.y = all->plr.pos.y + nDir.y * SPEED;
 		if (!(is_wall_cord(all->map, tmp, nDir)))
 			all->plr.pos = tmp;
 	}
 	if (keycode == LEFT)
-		all->plr.dir = rotateZ(all->plr.dir, -5);
+		all->plr.dir = rotateZ(all->plr.dir, -7);
 	if (keycode == RIGHT)
-		all->plr.dir = rotateZ(all->plr.dir, 5);
+		all->plr.dir = rotateZ(all->plr.dir, 7);
 	if (keycode == ESC)
 		exit(EXIT_SUCCESS);
-//	mlx_hook(all->win.mlx_win, 2, 1L<<0, key_hook, &all);
-	draw_screen(all);
 }
 
-void scale_pix(t_all *all, char **map)
-{
-	int x;
-	int y;
-	int i;
-	int j;
-
-	y = -1;
-	while (map[++y]) {
-		x = -1;
-		while (map[y][++x]) {
-			if (map[y][x] == '1') {
-				i = 0;
-				while (i++ < SCALE) {
-					my_mlx_pixel_put(all, x * SCALE + i, y * SCALE, 0x808080);
-					j = 0;
-					while (j++ < SCALE)
-						my_mlx_pixel_put(all, x * SCALE + i, y * SCALE + j, 0x808080);
-				}
-			}
-
-//			if (map[y][x] == '0') {
-//				i = 0;
-//				while (i++ < SCALE) {
-//					my_mlx_pixel_put(img, x * SCALE + i, y * SCALE, 0x151515);
-//					j = 0;
-//					while (j++ < SCALE)
-//						my_mlx_pixel_put(img, x * SCALE + i, y * SCALE + j, 0x151515);
-//				}
-//			}
-		}
-	}
-}
 void    init_img(t_all *all)
 {
 	all->win.img= mlx_new_image(all->win.mlx, all->textures.width, all->textures.height);
