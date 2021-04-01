@@ -116,7 +116,7 @@ typedef struct s_sprite
 	double	w;
 	int 	cent;
 	double 	dist;
-	int 	co;
+	int 	co;//count
 	int		vis;
 
 }				t_sprite;
