@@ -149,7 +149,7 @@ int open_file(char *file, t_textures *textures, t_all *all)
     if ((fd = open(file, O_RDONLY)) == -1)
     {
         ft_putstr_fd("Eroor map.", 1);
-        return (0);
+        exit (1);
     }
     while (len && fd != -1)
     {

@@ -39,6 +39,7 @@
 #  define DOWN 65364
 #  define RIGHT 65363
 #  define SPACE 32
+# define X 33
 # else
 #  include "../minilibx/mlx.h"
 #  define OS "MAC"
@@ -55,6 +56,7 @@
 #  define SPACE 49
 #  define LMOUSE 0
 #  define RMOUSE 0
+# define X 17
 # endif
 
 typedef struct	s_chel
@@ -129,6 +131,7 @@ typedef struct	s_all // структура для всего вместе
 	t_textures	textures;
 	t_sprite 	*sprite;
 	t_cord		ray0;
+	int			save;
 }				t_all;
 
 void			get_num_fromline(t_textures *textures, char **line);

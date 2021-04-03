@@ -57,7 +57,8 @@ int	check_valid(t_textures textures)
     {
         j = -1;
         while (flag == 1 && m[i][++j])
-            if (m[i][j] == '0' || m[i][j] == '2' || m[i][j] == 'N' || m[i][j] == 'S' || m[i][j] == 'E' || m[i][j] == 'W')
+            if (m[i][j] == '0' || m[i][j] == '2' || m[i][j] == 'N'
+            		|| m[i][j] == 'S' || m[i][j] == 'E' || m[i][j] == 'W')
             {
                 flag = check_map_wide(m, i, j);//Если на какой-то строке флаг = 0, то выходим из цикла
                 if (flag)

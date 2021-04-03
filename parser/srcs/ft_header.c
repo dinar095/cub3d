@@ -19,6 +19,7 @@ void	get_num_fromline(t_textures *textures, char **line)
 	while (**line >= '0' && **line <= '9')
 		(*line)++;
 	textures->height = ft_atoi(*line);
+
 }
 
 void	get_char_fromline(char **line, char **texture)
