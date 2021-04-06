@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/06 20:33:09 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/06 20:38:33 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,25 @@ void            my_mlx_pixel_put(t_all *all, int x, int y, int color)
 {
 	char    *dst;
 
-	if (x > 0 && y > 0 && x < all->textures.width && y < all->textures.height)//допилить
+	if (x > 0 && y > 0 && x < all->textures.width && y < all->textures.height)
 	{
-        dst = all->win.addr + (y * all->win.line_l + x * (all->win.bpp / 8));//
+        dst = all->win.addr + (y * all->win.line_l + x * (all->win.bpp / 8));
         *(unsigned int *) dst = color;
     }
 }
 
 void init_texture(t_all *all)
 {
-	all->txre_img[0].img = mlx_xpm_file_to_image(all->win.mlx, all->textures.no, &all->txre_img[0].w, &all->txre_img[0].h);
-	all->txre_img[1].img = mlx_xpm_file_to_image(all->win.mlx, all->textures.so, &all->txre_img[1].w, &all->txre_img[1].h);
-	all->txre_img[2].img = mlx_xpm_file_to_image(all->win.mlx, all->textures.we, &all->txre_img[2].w, &all->txre_img[2].h);
-	all->txre_img[3].img = mlx_xpm_file_to_image(all->win.mlx, all->textures.ea, &all->txre_img[3].w, &all->txre_img[3].h);
-	all->txre_img[4].img = mlx_xpm_file_to_image(all->win.mlx, all->textures.s, &all->txre_img[4].w, &all->txre_img[4].h);
+	all->txre_img[0].img = mlx_xpm_file_to_image(all->win.mlx,
+		all->textures.no, &all->txre_img[0].w, &all->txre_img[0].h);
+	all->txre_img[1].img = mlx_xpm_file_to_image(all->win.mlx,
+		all->textures.so, &all->txre_img[1].w, &all->txre_img[1].h);
+	all->txre_img[2].img = mlx_xpm_file_to_image(all->win.mlx,
+		all->textures.we, &all->txre_img[2].w, &all->txre_img[2].h);
+	all->txre_img[3].img = mlx_xpm_file_to_image(all->win.mlx,
+		all->textures.ea, &all->txre_img[3].w, &all->txre_img[3].h);
+	all->txre_img[4].img = mlx_xpm_file_to_image(all->win.mlx,
+		all->textures.s, &all->txre_img[4].w, &all->txre_img[4].h);
 }//need free pa
 
 t_cord net_point(t_cord ray, t_cord pos)
@@ -48,7 +53,8 @@ t_cord net_point(t_cord ray, t_cord pos)
 unsigned int get_color(t_data txre_img, int x, int y)
 {
 	char *dst;
-	txre_img.addr = mlx_get_data_addr(txre_img.img, &txre_img.bpp, &txre_img.line_l, &txre_img.endian);
+	txre_img.addr = mlx_get_data_addr(txre_img.img, &txre_img.bpp,
+								   &txre_img.line_l, &txre_img.endian);
 	if (x >= 0 && y >= 0 && x <= txre_img.w && y <= txre_img.h)
 	{
 		dst = txre_img.addr + (y * txre_img.line_l + x * (txre_img.bpp / 8));
@@ -169,12 +175,13 @@ int             key_hook(int keycode, t_all *all)
 
 void    init_img(t_all *all)
 {
-	all->win.img= mlx_new_image(all->win.mlx, all->textures.width, all->textures.height);
-	all->win.addr = mlx_get_data_addr(all->win.img, &(all->win.bpp),&(all->win.line_l),
-								  &(all->win.endian));
+	all->win.img= mlx_new_image(all->win.mlx, all->textures.width,
+							 all->textures.height);
+	all->win.addr = mlx_get_data_addr(all->win.img, &(all->win.bpp),
+								   &(all->win.line_l), &(all->win.endian));
 }
 
-t_cord   crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)//точка пересечения по точке и вектору
+t_cord   crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)
 {
 	t_cord dot_c;
 	t_cord	q_n;
@@ -184,10 +191,6 @@ t_cord   crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)//точка пер�
 	ft_bzero(&dot_c, sizeof(t_cord));
 	if (a.y != 0)
 	{
-		if (a.y == 0)
-		{
-			write(0, "1", 1);
-		}
 		q_n.x = - a.x / a.y;
 		q_n.y = ((dot_b.x - dot_a.x) + q_n.x * (dot_b.y - dot_a.y)) /
 			(b.x + b.y * q_n.x);
@@ -195,10 +198,7 @@ t_cord   crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)//точка пер�
 	else if (b.y != 0)
 		q_n.y = (dot_b.y - dot_a.y) / b.y;
 	else
-	{
-		ft_putstr_fd("Not cross", 1);
-		return (dot_a); // Затычка!!!!!!!!!!!!!!
-	}
+		q_n.y = (dot_b.y - dot_a.y) / 0.0000001;
 	dot_c.x = dot_b.x - q_n.y * b.x;
 	dot_c.y = dot_b.y - q_n.y * b.y;
 	return (dot_c);

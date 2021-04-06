@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/06 19:44:58 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/06 20:51:13 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@
 #  define RIGHT 124
 #  define DOWN 125
 #  define SPACE 49
-#  define LMOUSE 0
-#  define RMOUSE 0
 # define X 17
 # endif
 
@@ -64,6 +62,11 @@ typedef struct	s_chel
 	double		x;
 	double		y;
 }				t_cord;
+typedef struct	s_int
+{
+	int		i;
+	int		j;
+}				t_int;
 
 typedef struct	s_data
 {
@@ -79,16 +82,6 @@ typedef struct	s_data
 	double 		y;
 }               t_data;
 
-typedef struct	s_ray
-{
-	int			x;
-	int			side;
-	t_cord		dir;
-	double		dist;
-	double		perp;
-	t_cord		cross;
-   // t_sprite	*slist;
-}				t_ray;
 
 typedef struct	s_plr //структура для игрока и луча
 {
