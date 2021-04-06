@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/01 20:58:17 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/06 19:44:58 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ typedef struct	s_all // структура для всего вместе
 	t_sprite 	*sprite;
 	t_cord		ray0;
 	int			save;
+	t_cord		si_co;
 }				t_all;
 
 void			get_num_fromline(t_textures *textures, char **line);
@@ -148,7 +149,7 @@ double			ds_to_point(t_cord start, t_cord end);
 void			my_mlx_pixel_put(t_all *all, int x, int y, int color);
 t_cord			crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b);
 double			angle(t_cord begin, t_cord end);
-t_cord			rotateZ(t_cord vector,double angle);
+t_cord			rotateZ(t_cord vector,double angle, t_cord si_co);
 double			len_ray(t_cord ray1, t_cord ray2);
 unsigned int	get_color(t_data txre_img, int x, int y);
 t_cord			net_point(t_cord ray, t_cord pos);

@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/01 20:51:11 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/06 20:33:09 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,41 +124,45 @@ t_cord is_sprite(char **map,t_cord dot, t_cord ray)
 	else
 		return (v_set(-1,-1));
 }
-int             key_hook(int keycode, t_all *all)
+void go_f(t_all *all, int keycode)
 {
 	t_cord tmp;
+	if (keycode == W)
+	{
+		tmp.x = all->plr.pos.x + all->plr.dir.x * SPD;
+		tmp.y = all->plr.pos.y + all->plr.dir.y * SPD;
+	}
+	else
+	{
+		tmp.x = all->plr.pos.x - all->plr.dir.x * SPD;
+		tmp.y = all->plr.pos.y - all->plr.dir.y * SPD;
+	}
+	if (!(is_wall_cord(all->map, tmp, all->plr.dir)))
+		all->plr.pos = tmp;
+}
+void	go_dir(t_all *all, int keycode)
+{
 	t_cord nDir;
-	tmp = v_set(0,0);
+	t_cord tmp;
+	if (keycode == A)
+		nDir = rotateZ(all->plr.dir, 0, v_set(0, -1));
+	else
+		nDir = rotateZ(all->plr.dir, 0, v_set(0, 1));
+	tmp.x = all->plr.pos.x + nDir.x * SPD;
+	tmp.y = all->plr.pos.y + nDir.y * SPD;
+	if (!(is_wall_cord(all->map, tmp, nDir)))
+		all->plr.pos = tmp;
+}
+int             key_hook(int keycode, t_all *all)
+{
 	if (keycode == W || keycode == S)
-	{
-		if (keycode == W)
-		{
-			tmp.x = all->plr.pos.x + all->plr.dir.x * SPD;
-			tmp.y = all->plr.pos.y + all->plr.dir.y * SPD;
-		}
-		else
-		{
-			tmp.x = all->plr.pos.x - all->plr.dir.x * SPD;
-			tmp.y = all->plr.pos.y - all->plr.dir.y * SPD;
-		}
-		if (!(is_wall_cord(all->map, tmp, all->plr.dir)))
-			all->plr.pos = tmp;
-	}
+		go_f(all, keycode);
 	if (keycode == A || keycode == D)
-	{
-		if (keycode == A)
-			nDir = rotateZ(all->plr.dir, -90);
-		else
-			nDir = rotateZ(all->plr.dir, 90);
-		tmp.x = all->plr.pos.x + nDir.x * SPD;
-		tmp.y = all->plr.pos.y + nDir.y * SPD;
-		if (!(is_wall_cord(all->map, tmp, nDir)))
-			all->plr.pos = tmp;
-	}
+		go_dir(all, keycode);
 	if (keycode == LEFT)
-		all->plr.dir = rotateZ(all->plr.dir, -7);
+		all->plr.dir = rotateZ(all->plr.dir, -7, v_set(0.99, 0.12));
 	if (keycode == RIGHT)
-		all->plr.dir = rotateZ(all->plr.dir, 7);
+		all->plr.dir = rotateZ(all->plr.dir, 7, v_set(0.99, -0.12));
 	if (keycode == ESC)
 		exit(EXIT_SUCCESS);
 }
@@ -173,8 +177,7 @@ void    init_img(t_all *all)
 t_cord   crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)//точка пересечения по точке и вектору
 {
 	t_cord dot_c;
-	double  q;
-	double  n;
+	t_cord	q_n;
 
 	if (dot_b.x == dot_a.x && dot_b.y == dot_a.y)
 		return (dot_b);
@@ -185,19 +188,19 @@ t_cord   crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)//точка пер�
 		{
 			write(0, "1", 1);
 		}
-		q = - a.x / a.y;
-		n = ((dot_b.x - dot_a.x) + q * (dot_b.y - dot_a.y)) /
-			(b.x + b.y * q);
+		q_n.x = - a.x / a.y;
+		q_n.y = ((dot_b.x - dot_a.x) + q_n.x * (dot_b.y - dot_a.y)) /
+			(b.x + b.y * q_n.x);
 	}
 	else if (b.y != 0)
-		n = (dot_b.y - dot_a.y) / b.y;
+		q_n.y = (dot_b.y - dot_a.y) / b.y;
 	else
 	{
 		ft_putstr_fd("Not cross", 1);
 		return (dot_a); // Затычка!!!!!!!!!!!!!!
 	}
-	dot_c.x = dot_b.x - n * b.x;
-	dot_c.y = dot_b.y - n * b.y;
+	dot_c.x = dot_b.x - q_n.y * b.x;
+	dot_c.y = dot_b.y - q_n.y * b.y;
 	return (dot_c);
 }
 void	null_sprites(t_all *all)
@@ -214,21 +217,19 @@ double angle(t_cord begin, t_cord end)
 	double q;
 	double a;
 	double b;
-	q = begin.x * end.x + begin.y*end.y;//скалярное произведение векторов
+	q = begin.x * end.x + begin.y * end.y;//скалярное произведение векторов
 	a = sqrt(pow(begin.x, 2) + pow(begin.y,2));
 	b = sqrt(pow(end.x, 2) + pow(end.y,2));
 	q = q / (a * b);
 	return (q);
 }
-t_cord rotateZ(t_cord vector,double angle)
-{ // angle in radians
-
-//normalize(vector); // No  need to normalize, vector is already ok...
+t_cord rotateZ(t_cord vector,double angle, t_cord si_co)
+{
 	angle = angle * (M_PI/180);
+	if (angle != 0)
+		si_co = v_set(cos(angle), sin(angle));
 	t_cord tmp;
-	tmp.x = (vector.x * cos(angle) - vector.y * sin(angle));
-
-	tmp.y = (vector.x * sin(angle) + vector.y * cos(angle));
-
+	tmp.x = (vector.x * si_co.x - vector.y * si_co.y);
+	tmp.y = (vector.x * si_co.y + vector.y * si_co.x);
 	return (tmp);
 }
