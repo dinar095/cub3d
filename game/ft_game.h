@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/10 10:22:57 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/10 14:58:16 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include "../libft/libft.h"
 # include <math.h>
 
-# define SPD 0.49
+# define SPD 0.29
 # define ANG 46
 
 # ifdef __linux__
