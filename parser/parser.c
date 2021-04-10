@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/31 19:01:02 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/10 17:08:55 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ void	mem_sprt(t_all *all, t_cord *art, int w)
 	int i;
 
 	i = -1;
-
 	all->sprite = (t_sprite *)malloc(sizeof(t_sprite) * w);
 	while (++i < w)
 	{
@@ -116,12 +115,11 @@ void	parse_plr(t_textures *textures, t_all *all)
 	{
 		j = -1;
 		while (textures->map[i][++j])
-		{
 			if (ft_strchr("NSEW01", textures->map[i][j]))
 			{
 				if (ft_strchr("NSWE", textures->map[i][j]) && textures->plr.dir.y != -2)
-				exit (1);
-				if (textures->map[i][j] == 'N')
+					err("Err plr in map");
+				else if (textures->map[i][j] == 'N')
 					cr_pos(textures, 0, -1, i, j);
 				else if (textures->map[i][j] == 'S')
 					cr_pos(textures, 0, 1, i, j);
@@ -133,11 +131,9 @@ void	parse_plr(t_textures *textures, t_all *all)
 			else if (textures->map[i][j] == '2')
 				art[w++] = v_set(j + 0.5, i + 0.5);
 			else
-				exit(1);//Invalid arg, exit
-		}
+				err("Invalid arguments");
 	}
 	mem_sprt(all, art, w);
-
 }
 int open_file(char *file, t_textures *textures, t_all *all)
 {
@@ -147,10 +143,7 @@ int open_file(char *file, t_textures *textures, t_all *all)
     reset_textures(textures);
     len = 1;
     if ((fd = open(file, O_RDONLY)) == -1)
-    {
-        ft_putstr_fd("Eroor map.", 1);
-        exit (1);
-    }
+        err("Error map");
     while (len && fd != -1)
     {
         len = get_next_line(fd, &line);

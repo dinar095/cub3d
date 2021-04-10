@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/06 20:51:13 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/10 17:08:41 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@
 # include "../libft/libft.h"
 # include <math.h>
 
-# define SPD 0.49
+# define SPD 0.29
+# define ANG 46
 
 # ifdef __linux__
 # include "../linminilibx/mlx.h"
@@ -111,11 +112,11 @@ typedef struct s_sprite
 	double	w;
 	int 	cent;
 	double 	dist;
-	int 	co;//count
+	int 	co;
 	int		vis;
 
 }				t_sprite;
-typedef struct	s_all // структура для всего вместе
+typedef struct	s_all
 {
 	t_data		win;
 	t_data		txre_img[5];
@@ -153,4 +154,13 @@ void			draw_screen(t_all *all);
 t_cord 			v_set(double val_x, double val_y);
 t_cord			is_sprite(char **map,t_cord dot, t_cord ray);
 void			null_sprites(t_all *all);
-#endif //DESAUSAG_FT_GAME_H
+void			err(char *s);
+void			sort_sprite(t_all *all);
+double			print_sprite(t_all *all, double *zBuf);
+void			draw_sprite(t_all *all, t_sprite spr, double *zBuf);
+void			init_sprite(t_all *all,t_cord cross);
+void			check_display_resolution(t_all *all);
+void			screen_image(t_all *all);
+int				check_ext(const char *f_name);
+double			print_wall(t_cord crs, t_all *all, int x, t_cord ray, int side);
+#endif
