@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/10 17:08:41 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/10 17:08:55 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ void	mem_sprt(t_all *all, t_cord *art, int w)
 	int i;
 
 	i = -1;
-
 	all->sprite = (t_sprite *)malloc(sizeof(t_sprite) * w);
 	while (++i < w)
 	{
@@ -144,10 +143,7 @@ int open_file(char *file, t_textures *textures, t_all *all)
     reset_textures(textures);
     len = 1;
     if ((fd = open(file, O_RDONLY)) == -1)
-    {
-        ft_putstr_fd("Eroor map.", 1);
-        exit (1);
-    }
+        err("Error map");
     while (len && fd != -1)
     {
         len = get_next_line(fd, &line);
