@@ -161,5 +161,6 @@ void			draw_sprite(t_all *all, t_sprite spr, double *zBuf);
 void			init_sprite(t_all *all,t_cord cross);
 void			check_display_resolution(t_all *all);
 void			screen_image(t_all *all);
-int			check_ext(const char *f_name);
+int				check_ext(const char *f_name);
+double			print_wall(t_cord crs, t_all *all, int x, t_cord ray, int side);
 #endif

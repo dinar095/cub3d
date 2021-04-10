@@ -89,6 +89,58 @@ t_cord net_point(t_cord ray, t_cord pos)
 		tmp.y = floor(pos.y);
 	return (tmp);
 }
+unsigned int vis(t_all *all, t_int s_t, t_cord cross, t_cord ray)
+{
+	int tmp1;
+	int wall;
+
+
+	if (s_t.i == 1)
+	{
+		if (ray.y > 0)
+			wall = 1;
+		else
+			wall = 0;
+		tmp1 = (int)((cross.x - floor(cross.x)) * all->txre_img[wall].w);
+	}
+	else if (s_t.i == 0)
+	{
+		if (ray.x > 0)
+			wall = 3;
+		else
+			wall = 2;
+		tmp1 = (int)((cross.y - floor(cross.y)) * all->txre_img[wall].w);
+	}
+	return (get_color(all->txre_img[wall], tmp1, s_t.j));
+}
+
+double	print_wall(t_cord crs, t_all *all, int x, t_cord ray, int side)
+{
+	double	d_to_wall;
+	double	h;
+	t_cord	y;
+	t_cord	i_k;
+	t_int	s_t;
+
+	i_k.x = -1;
+	s_t.i = side;
+	d_to_wall = len_ray(all->plr.pos, crs) * angle(all->plr.dir, ray);
+	h = all->textures.height/(d_to_wall);
+	y.x = all->textures.height/2 - h/2;
+	y.y = all->textures.height/2 + h/2;
+	i_k.y = all->txre_img[side].h / h;
+	while (++i_k.x <= all->textures.height)
+		if (i_k.x > y.x  && i_k.x < y.y)
+		{
+			s_t.j = (int) (i_k.y * (i_k.x - y.x));
+			my_mlx_pixel_put(all, x, i_k.x, vis(all, s_t, crs, ray));
+		}
+		else if (i_k.x <= y.x)
+			my_mlx_pixel_put(all, x, i_k.x, 0xAFEEEE);
+		else if (i_k.x >= y.y)
+			my_mlx_pixel_put(all, x, i_k.x, 0xCD853F);
+	return (y.x);
+}
 int		check_ext(const char *f_name)
 {
 	int c;
