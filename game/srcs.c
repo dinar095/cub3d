@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/06 20:38:33 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/10 10:14:57 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,47 @@ void            my_mlx_pixel_put(t_all *all, int x, int y, int color)
         *(unsigned int *) dst = color;
     }
 }
+static void			init_bmp_header(t_all *all, int fd)
+{
+	int				val;
 
+	write(fd, "BM", 2);
+	val = 14 + 40 + all->textures.width * all->textures.height *
+					all->win.bpp / 8;
+	write(fd, &val, 4);
+	write(fd, "\0\0\0\0", 4);
+	val = 14 + 40;
+	write(fd, &val, 4);
+	val = 40;
+	write(fd, &val, 4);
+	write(fd, &all->textures.width, 4);
+	write(fd, &all->textures.height, 4);
+	val = 1;
+	write(fd, &val, 2);
+	write(fd, &all->win.bpp, 2);
+	write(fd, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", 24);
+}
+
+void				screen_image(t_all *all)
+{
+	char			*file_name;
+	int				fd;
+	int				i;
+
+	file_name = "screen.bmp";
+	fd = open(file_name, O_RDWR | O_CREAT | O_TRUNC, 0666);
+	if (fd < 0)
+		err("Can't open file\n");
+	init_bmp_header(all, fd);
+	i = all->textures.height;
+	while (i-- > 0)
+	{
+		write(fd, (all->win.addr + i * all->win.line_l),
+			  (all->textures.width * all->win.bpp / 8));
+	}
+	close(fd);
+	exit(0);
+}
 void init_texture(t_all *all)
 {
 	all->txre_img[0].img = mlx_xpm_file_to_image(all->win.mlx,
@@ -34,7 +74,7 @@ void init_texture(t_all *all)
 		all->textures.ea, &all->txre_img[3].w, &all->txre_img[3].h);
 	all->txre_img[4].img = mlx_xpm_file_to_image(all->win.mlx,
 		all->textures.s, &all->txre_img[4].w, &all->txre_img[4].h);
-}//need free pa
+}
 
 t_cord net_point(t_cord ray, t_cord pos)
 {
@@ -49,7 +89,14 @@ t_cord net_point(t_cord ray, t_cord pos)
 		tmp.y = floor(pos.y);
 	return (tmp);
 }
-
+int		check_ext(const char *f_name)
+{
+	int c;
+	c = ft_strlen(f_name);
+	if (c > 6 && !ft_strncmp(f_name + (c-4), ".cub", 4))
+		return (1);
+	return 0;
+}
 unsigned int get_color(t_data txre_img, int x, int y)
 {
 	char *dst;
@@ -172,7 +219,106 @@ int             key_hook(int keycode, t_all *all)
 	if (keycode == ESC)
 		exit(EXIT_SUCCESS);
 }
+void		check_display_resolution(t_all *all)
+{
+	int wide;
+	int height;
 
+	if (!all->save)
+	{
+		mlx_get_screen_size(all->win.mlx, &wide, &height);
+		if (wide < all->textures.width)
+			all->textures.width = wide;
+		if (height < all->textures.height)
+			all->textures.height = height;
+	}
+}
+void	init_sprite(t_all *all,t_cord cross)
+{
+	int i;
+	t_cord vec;
+	double ugol;
+	int		znak;
+
+	i = -1;
+	while (++i < all->sprite->co)
+	{
+		if ((int)all->sprite[i].pos.x == (int)cross.x && (int)all->sprite[i].pos.y == (int)cross.y
+			&& all->sprite[i].vis == 0)
+		{
+			all->sprite[i].vis = 1;
+			vec = v_set(all->sprite[i].pos.x - all->plr.pos.x, all->sprite[i].pos.y - all->plr.pos.y);//вектор до центра спрайта
+			znak = all->ray0.x * vec.y - all->ray0.y * vec.x < 0 ? -1 : 1;
+			ugol = acos(angle(all->ray0, vec)) * znak * 180 / M_PI;
+			all->sprite[i].cent = ugol / 46 * all->textures.width;
+		}
+	}
+}
+void	draw_sprite(t_all *all, t_sprite spr, double *zBuf)
+{
+	t_int i;
+	t_cord h;
+	t_cord y;
+	t_int tmp;
+	int color;
+
+	h.x = all->textures.height/len_ray(all->plr.pos, spr.pos);
+	y.x = all->textures.height/2 - h.x/2;
+	y.y = all->textures.height/2 + h.x/2;
+	h.y = all->txre_img[4].w / h.x;
+	i.i = spr.cent - h.x / 2;
+	while (++i.i < (spr.cent + h.x / 2))
+		if (i.i > 0 && i.i < all->textures.width)
+		{
+			tmp.i = (i.i - spr.cent + h.x / 2) * h.y;//сброс верхней точки
+			i.j = -1;
+			while (++i.j < y.y)
+				if (i.j > y.x  && i.j < y.y && y.x <= zBuf[i.i]) //смотрим по высоте
+				{
+					tmp.j = (int) (h.y * (i.j - y.x));
+					if ((color = get_color(all->txre_img[4], tmp.i, tmp.j)))
+						my_mlx_pixel_put(all, i.i, i.j, color);
+				}
+		}
+}
+double	print_sprite(t_all *all, double *zBuf)
+{
+	int 		i;
+
+	i = -1;
+
+	while (++i < all->sprite->co)
+		all->sprite[i].dist = len_ray(all->sprite[i].pos, all->plr.pos);
+	sort_sprite(all);
+	i = -1;
+	while (++i < all->sprite->co)
+	{
+		if (all->sprite[i].vis)
+			draw_sprite(all, all->sprite[i], zBuf);
+	}
+}
+
+void	sort_sprite(t_all *all)
+{
+	t_sprite newSprite;
+	int location;
+	int i;
+
+	i = 1;
+
+	while (i < all->sprite[0].co)
+	{
+		newSprite = all->sprite[i];
+		location = i - 1;
+		while(location >= 0 && all->sprite[location].dist < newSprite.dist)
+		{
+			all->sprite[location+1] = all->sprite[location];
+			location = location - 1;
+		}
+		all->sprite[location+1] = newSprite;
+		i++;
+	}
+}
 void    init_img(t_all *all)
 {
 	all->win.img= mlx_new_image(all->win.mlx, all->textures.width,
@@ -180,6 +326,7 @@ void    init_img(t_all *all)
 	all->win.addr = mlx_get_data_addr(all->win.img, &(all->win.bpp),
 								   &(all->win.line_l), &(all->win.endian));
 }
+
 
 t_cord   crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)
 {
@@ -212,6 +359,13 @@ void	null_sprites(t_all *all)
 	while (++i < all->sprite->co)
 		all->sprite[i].vis = 0;
 }
+
+void	err(char *s)
+{
+	ft_putstr_fd(s, 1);
+	exit(1);
+}
+
 double angle(t_cord begin, t_cord end)
 {
 	double q;
