@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 09:25:16 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/11 12:23:54 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/11 15:12:05 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int check_map_wide(char **map, int i, int j)
 
     flag = 0;
     t = j - 1;
-    while (flag == 0 && map[i][++t])
+    while (flag == 0 && map[i][++t] != '\0')
         if (map[i][t] == '1')
             flag = 2;
     t = j + 1;
@@ -65,7 +65,7 @@ int	check_valid(t_tx tx)
     flag = 1;
     i = -1;
     m = tx.map;
-    while (flag == 1 && m[++i])//проверяем построчно верность
+    while (flag == 1 && m[++i])
     {
         j = -1;
         while (flag == 1 && m[i][++j])

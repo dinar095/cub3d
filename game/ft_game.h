@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/11 12:27:44 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/11 15:25:35 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ double			ds_to_point(t_cord start, t_cord end);
 void			my_mlx_pixel_put(t_all *all, int x, int y, int color);
 t_cord			crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b);
 double			angle(t_cord begin, t_cord end);
-t_cord			rotateZ(t_cord vector,double angle, t_cord si_co);
+t_cord			rttz(t_cord vector, double angle, t_cord si_co);
 double			len_ray(t_cord ray1, t_cord ray2);
 unsigned int	get_color(t_data txre_img, int x, int y);
 t_cord			net_point(t_cord ray, t_cord pos);
@@ -156,11 +156,12 @@ t_cord			is_sprite(char **map,t_cord dot, t_cord ray);
 void			null_sprites(t_all *all);
 void			err(char *s);
 void			sort_sprite(t_all *all);
-double			print_sprite(t_all *all, double *zBuf);
+double			print_sprite(t_all *all, double *zbuf);
 void			draw_sprite(t_all *all, t_sprite spr, double *zbuf);
 void			init_sprite(t_all *all,t_cord cross);
 void			check_display_resolution(t_all *all);
 void			screen_image(t_all *all);
 int				check_ext(const char *f_name);
-double			print_wall(t_cord crs, t_all *all, int x, t_cord ray, int side);
+double			print_wall(t_cord crs, t_all *all, t_int x_s, t_cord ray);
+t_int			v_int(int val_x, int val_y);
 #endif

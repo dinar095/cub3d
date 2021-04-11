@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/11 12:33:06 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/11 14:53:15 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ unsigned int	vis(t_all *all, t_int s_t, t_cord cross, t_cord ray)
 	return (get_color(all->txre_img[wall], tmp1, s_t.j));
 }
 
-double			print_wall(t_cord crs, t_all *all, int x, t_cord ray, int side)
+double			print_wall(t_cord crs, t_all *all, t_int x_s, t_cord ray)
 {
 	t_cord	h_dis;
 	t_cord	y;
@@ -125,23 +125,23 @@ double			print_wall(t_cord crs, t_all *all, int x, t_cord ray, int side)
 	t_int	s_t;
 
 	i_k.x = -1;
-	s_t.i = side;
+	s_t.i = x_s.j;
 	h_dis.y = len_ray(all->plr.pos, crs) * angle(all->plr.dir, ray);
 	h_dis.x = all->tx.height / (h_dis.y);
 	y.x = all->tx.height / 2 - h_dis.x / 2;
 	y.y = all->tx.height / 2 + h_dis.x / 2;
-	i_k.y = all->txre_img[side].h / h_dis.x;
+	i_k.y = all->txre_img[x_s.j].h / h_dis.x;
 	while (++i_k.x <= all->tx.height)
 	{
 		if (i_k.x > y.x && i_k.x < y.y)
 		{
 			s_t.j = (int)(i_k.y * (i_k.x - y.x));
-			my_mlx_pixel_put(all, x, i_k.x, vis(all, s_t, crs, ray));
+			my_mlx_pixel_put(all, x_s.i, i_k.x, vis(all, s_t, crs, ray));
 		}
 		else if (i_k.x <= y.x)
-			my_mlx_pixel_put(all, x, i_k.x, 0xAFEEEE);
+			my_mlx_pixel_put(all, x_s.i, i_k.x, all->tx.f);
 		else if (i_k.x >= y.y)
-			my_mlx_pixel_put(all, x, i_k.x, 0xCD853F);
+			my_mlx_pixel_put(all, x_s.i, i_k.x, all->tx.c);
 	}
 	return (y.x);
 }
@@ -206,10 +206,10 @@ int				is_wall_cord(char **map, t_cord dot, t_cord ray)
 		y = (int)ceil(dot.y) - 1;
 	else
 		y = (int)dot.y;
-	if (map[y][x] != '1')
-		return (0);
-	else
+	if (map[y][x] != '0')
 		return (1);
+	else
+		return (0);
 }
 
 t_cord			v_set(double val_x, double val_y)
@@ -218,6 +218,15 @@ t_cord			v_set(double val_x, double val_y)
 
 	res.x = val_x;
 	res.y = val_y;
+	return (res);
+}
+
+t_int			v_int(int val_x, int val_y)
+{
+	t_int		res;
+
+	res.i = val_x;
+	res.j = val_y;
 	return (res);
 }
 
@@ -256,6 +265,7 @@ void			go_f(t_all *all, int keycode)
 	}
 	if (!(is_wall_cord(all->map, tmp, all->plr.dir)))
 		all->plr.pos = tmp;
+
 }
 
 void			go_dir(t_all *all, int keycode)
@@ -264,9 +274,9 @@ void			go_dir(t_all *all, int keycode)
 	t_cord	tmp;
 
 	if (keycode == A)
-		ndir = rotateZ(all->plr.dir, 0, v_set(0, -1));
+		ndir = rttz(all->plr.dir, 0, v_set(0, -1));
 	else
-		ndir = rotateZ(all->plr.dir, 0, v_set(0, 1));
+		ndir = rttz(all->plr.dir, 0, v_set(0, 1));
 	tmp.x = all->plr.pos.x + ndir.x * SPD;
 	tmp.y = all->plr.pos.y + ndir.y * SPD;
 	if (!(is_wall_cord(all->map, tmp, ndir)))
@@ -280,9 +290,9 @@ int				key_hook(int keycode, t_all *all)
 	if (keycode == A || keycode == D)
 		go_dir(all, keycode);
 	if (keycode == LEFT)
-		all->plr.dir = rotateZ(all->plr.dir, -7, v_set(0.99, 0.12));
+		all->plr.dir = rttz(all->plr.dir, -7, v_set(0.99, 0.12));
 	if (keycode == RIGHT)
-		all->plr.dir = rotateZ(all->plr.dir, 7, v_set(0.99, -0.12));
+		all->plr.dir = rttz(all->plr.dir, 7, v_set(0.99, -0.12));
 	if (keycode == ESC)
 		exit(EXIT_SUCCESS);
 }
@@ -341,19 +351,19 @@ void			draw_sprite(t_all *all, t_sprite spr, double *zbuf)
 	while (++i.i < (spr.cent + h.x / 2))
 		if (i.i > 0 && i.i < all->tx.width)
 		{
-			tmp.i = (i.i - spr.cent + h.x / 2) * h.y;//сброс верхней точки
+			tmp.i = (i.i - spr.cent + h.x / 2) * h.y;
 			i.j = -1;
 			while (++i.j < y.y)
-				if (i.j > y.x  && i.j < y.y && y.x <= zbuf[i.i]) //смотрим по высоте
+				if (i.j > y.x && i.j < y.y && y.x <= zbuf[i.i])
 				{
-					tmp.j = (int) (h.y * (i.j - y.x));
+					tmp.j = (int)(h.y * (i.j - y.x));
 					if ((color = get_color(all->txre_img[4], tmp.i, tmp.j)))
 						my_mlx_pixel_put(all, i.i, i.j, color);
 				}
 		}
 }
 
-double			print_sprite(t_all *all, double *zBuf)
+double			print_sprite(t_all *all, double *zbuf)
 {
 	int	i;
 
@@ -365,34 +375,34 @@ double			print_sprite(t_all *all, double *zBuf)
 	while (++i < all->sp->co)
 	{
 		if (all->sp[i].vis)
-			draw_sprite(all, all->sp[i], zBuf);
+			draw_sprite(all, all->sp[i], zbuf);
 	}
 }
 
 void			sort_sprite(t_all *all)
 {
-	t_sprite	newSprite;
+	t_sprite	nwsprt;
 	int			location;
 	int			i;
 
 	i = 1;
 	while (i < all->sp[0].co)
 	{
-		newSprite = all->sp[i];
+		nwsprt = all->sp[i];
 		location = i - 1;
-		while(location >= 0 && all->sp[location].dist < newSprite.dist)
+		while (location >= 0 && all->sp[location].dist < nwsprt.dist)
 		{
 			all->sp[location + 1] = all->sp[location];
 			location = location - 1;
 		}
-		all->sp[location + 1] = newSprite;
+		all->sp[location + 1] = nwsprt;
 		i++;
 	}
 }
 
 void			init_img(t_all *all)
 {
-	all->win.img= mlx_new_image(all->win.mlx, all->tx.width,
+	all->win.img = mlx_new_image(all->win.mlx, all->tx.width,
 			all->tx.height);
 	all->win.addr = mlx_get_data_addr(all->win.img, &(all->win.bpp),
 			&(all->win.line_l), &(all->win.endian));
@@ -408,7 +418,7 @@ t_cord			crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b)
 	ft_bzero(&dot_c, sizeof(t_cord));
 	if (a.y != 0)
 	{
-		q_n.x = - a.x / a.y;
+		q_n.x = -a.x / a.y;
 		q_n.y = ((dot_b.x - dot_a.x) + q_n.x * (dot_b.y - dot_a.y)) /
 			(b.x + b.y * q_n.x);
 	}
@@ -432,6 +442,7 @@ void			null_sprites(t_all *all)
 
 void			err(char *s)
 {
+	ft_putstr_fd("Error\n", 1);
 	ft_putstr_fd(s, 1);
 	exit(1);
 }
@@ -443,18 +454,19 @@ double			angle(t_cord begin, t_cord end)
 	double	b;
 
 	q = begin.x * end.x + begin.y * end.y;
-	a = sqrt(pow(begin.x, 2) + pow(begin.y,2));
-	b = sqrt(pow(end.x, 2) + pow(end.y,2));
+	a = sqrt(pow(begin.x, 2) + pow(begin.y, 2));
+	b = sqrt(pow(end.x, 2) + pow(end.y, 2));
 	q = q / (a * b);
 	return (q);
 }
 
-t_cord			rotateZ(t_cord vector,double angle, t_cord si_co)
+t_cord			rttz(t_cord vector, double angle, t_cord si_co)
 {
+	t_cord tmp;
+
 	angle = angle * (M_PI / 180);
 	if (angle != 0)
 		si_co = v_set(cos(angle), sin(angle));
-	t_cord tmp;
 	tmp.x = (vector.x * si_co.x - vector.y * si_co.y);
 	tmp.y = (vector.x * si_co.y + vector.y * si_co.x);
 	return (tmp);
