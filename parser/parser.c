@@ -143,7 +143,7 @@ int open_file(char *file, t_textures *textures, t_all *all)
     reset_textures(textures);
     len = 1;
     if ((fd = open(file, O_RDONLY)) == -1)
-        err("Error map");
+        err("Error file");
     while (len && fd != -1)
     {
         len = get_next_line(fd, &line);
@@ -151,7 +151,11 @@ int open_file(char *file, t_textures *textures, t_all *all)
         free(line);
     }
     close(fd);
-    parse_plr(textures, all);
+	parse_plr(textures, all);
+	all->textures = *textures;
+	all->plr = textures->plr;
+	all->map = textures->map;
+	all->save = 0;
     if (!(check_valid(*textures)))
         return (0);
     return (1);
