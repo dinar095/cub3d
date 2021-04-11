@@ -1,0 +1,1 @@
+norminette ./game/srcs.c

@@ -6,28 +6,29 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/10 17:08:41 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/11 09:50:44 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_game.h"
-void            my_mlx_pixel_put(t_all *all, int x, int y, int color)
+void	my_mlx_pixel_put(t_all *all, int x, int y, int color)
 {
-	char    *dst;
+	char	*dst;
 
 	if (x > 0 && y > 0 && x < all->textures.width && y < all->textures.height)
 	{
-        dst = all->win.addr + (y * all->win.line_l + x * (all->win.bpp / 8));
-        *(unsigned int *) dst = color;
-    }
+		dst = all->win.addr + (y * all->win.line_l + x * (all->win.bpp / 8));
+		*(unsigned int *) dst = color;
+	}
 }
-static void			init_bmp_header(t_all *all, int fd)
+
+static void	init_bmp_header(t_all *all, int fd)
 {
 	int				val;
 
 	write(fd, "BM", 2);
-	val = 14 + 40 + all->textures.width * all->textures.height *
-					all->win.bpp / 8;
+	val = (14 + 40 + all->textures.width * all->textures.height *
+			all->win.bpp / 8);
 	write(fd, &val, 4);
 	write(fd, "\0\0\0\0", 4);
 	val = 14 + 40;
@@ -42,7 +43,7 @@ static void			init_bmp_header(t_all *all, int fd)
 	write(fd, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", 24);
 }
 
-void				screen_image(t_all *all)
+void	screen_image(t_all *all)
 {
 	char			*file_name;
 	int				fd;
