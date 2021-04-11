@@ -6,25 +6,25 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/11 09:51:38 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/11 12:26:31 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../game/ft_game.h"
 
-static void	reset_textures(t_textures *textures)
+static void	reset_textures(t_tx *tx)
 {
-	textures->width = -1;
-	textures->height = -1;
-	textures->no = NULL;
-	textures->so = NULL;
-	textures->we = NULL;
-	textures->ea = NULL;
-	textures->s = NULL;
-	textures->f = -1;
-	textures->c = -1;
-	textures->map = NULL;
-	textures->plr.dir.y = -2;
+	tx->width = -1;
+	tx->height = -1;
+	tx->no = NULL;
+	tx->so = NULL;
+	tx->we = NULL;
+	tx->ea = NULL;
+	tx->s = NULL;
+	tx->f = -1;
+	tx->c = -1;
+	tx->map = NULL;
+	tx->plr.dir.y = -2;
 }
 
 static char 	**map_join(char ***map, char **line)
@@ -53,56 +53,56 @@ static char 	**map_join(char ***map, char **line)
 	return (ret);
 }
 
-static void	 get_map(t_textures *textures, char **line)
+static void	 get_map(t_tx *tx, char **line)
 {
-	if (!(check_header(textures)))
+	if (!(check_header(tx)))
 		return;
-	if ((**line == '\n' || **line == '\0' || **line == '0') && textures->map == NULL)
+	if ((**line == '\n' || **line == '\0' || **line == '0') && tx->map == NULL)
 		return;
-	textures->map = map_join(&textures->map, line);
+	tx->map = map_join(&tx->map, line);
 }
 
-static void	parse_line(char *line, t_textures *textures)
+static void	parse_line(char *line, t_tx *tx)
 {
 
 	if (!(ft_strncmp(line, "R ", 2)))
-  		get_num_fromline(textures, &line);
+  		get_num_fromline(tx, &line);
 	else if (!(ft_strncmp(line, "NO", 2)))
-		get_char_fromline(&line, &(textures->no));
+		get_char_fromline(&line, &(tx->no));
 	else if (!(ft_strncmp(line, "SO", 2)))
-			get_char_fromline(&line, &(textures->so));
+			get_char_fromline(&line, &(tx->so));
 	else if (!(ft_strncmp(line, "WE", 2)))
-			get_char_fromline(&line, &(textures->we));
+			get_char_fromline(&line, &(tx->we));
 	else if (!(ft_strncmp(line, "EA", 2)))
-			get_char_fromline(&line, &(textures->ea));
+			get_char_fromline(&line, &(tx->ea));
 	else if (!(ft_strncmp(line, "S ", 2)))
-			get_char_fromline(&line, &(textures->s));
+			get_char_fromline(&line, &(tx->s));
 	else if (!(ft_strncmp(line, "F ", 2)))
-			get_color_fromline(&line, &(textures->f));
+			get_color_fromline(&line, &(tx->f));
 	else if (!(ft_strncmp(line, "C ", 2)))
-			get_color_fromline(&line, &(textures->c));
-	get_map(textures, &line);
+			get_color_fromline(&line, &(tx->c));
+	get_map(tx, &line);
 }
-void 	cr_pos(t_textures *textures, int dirx, int diry, int posy, int posx)
+void 	cr_pos(t_tx *tx, int dirx, int diry, int posy, int posx)
 {
-	textures->plr.dir.x = dirx;
-	textures->plr.dir.y = diry;
-	textures->plr.pos.y = posy + 0.5;
-	textures->plr.pos.x = posx + 0.5;
+	tx->plr.dir.x = dirx;
+	tx->plr.dir.y = diry;
+	tx->plr.pos.y = posy + 0.5;
+	tx->plr.pos.x = posx + 0.5;
 }
 void	mem_sprt(t_all *all, t_cord *art, int w)
 {
 	int i;
 
 	i = -1;
-	all->sprite = (t_sprite *)malloc(sizeof(t_sprite) * w);
+	all->sp = (t_sprite *)malloc(sizeof(t_sprite) * w);
 	while (++i < w)
 	{
-		all->sprite[i].pos = art[i];
-		all->sprite[i].co = w;
+		all->sp[i].pos = art[i];
+		all->sp[i].co = w;
 	}
 }
-void	parse_plr(t_textures *textures, t_all *all)
+void	parse_plr(t_tx *tx, t_all *all)
 {
 	int i;
 	int j;
@@ -111,52 +111,52 @@ void	parse_plr(t_textures *textures, t_all *all)
 
 	i = -1;
 	w = 0;
-	while (textures->map[++i])
+	while (tx->map[++i])
 	{
 		j = -1;
-		while (textures->map[i][++j])
-			if (ft_strchr("NSEW01", textures->map[i][j]))
+		while (tx->map[i][++j])
+			if (ft_strchr("NSEW01", tx->map[i][j]))
 			{
-				if (ft_strchr("NSWE", textures->map[i][j]) && textures->plr.dir.y != -2)
+				if (ft_strchr("NSWE", tx->map[i][j]) && tx->plr.dir.y != -2)
 					err("Err plr in map");
-				else if (textures->map[i][j] == 'N')
-					cr_pos(textures, 0, -1, i, j);
-				else if (textures->map[i][j] == 'S')
-					cr_pos(textures, 0, 1, i, j);
-				else if (textures->map[i][j] == 'E')
-					cr_pos(textures, -1, 0, i, j);
-				else if (textures->map[i][j] == 'W')
-					cr_pos(textures, 1, 0, i, j);
+				else if (tx->map[i][j] == 'N')
+					cr_pos(tx, 0, -1, i, j);
+				else if (tx->map[i][j] == 'S')
+					cr_pos(tx, 0, 1, i, j);
+				else if (tx->map[i][j] == 'E')
+					cr_pos(tx, -1, 0, i, j);
+				else if (tx->map[i][j] == 'W')
+					cr_pos(tx, 1, 0, i, j);
 			}
-			else if (textures->map[i][j] == '2')
+			else if (tx->map[i][j] == '2')
 				art[w++] = v_set(j + 0.5, i + 0.5);
 			else
 				err("Invalid arguments");
 	}
 	mem_sprt(all, art, w);
 }
-int open_file(char *file, t_textures *textures, t_all *all)
+int open_file(char *file, t_tx *tx, t_all *all)
 {
     int fd;
     char *line;
     int len;
-    reset_textures(textures);
+    reset_textures(tx);
     len = 1;
     if ((fd = open(file, O_RDONLY)) == -1)
         err("Error file");
     while (len && fd != -1)
     {
         len = get_next_line(fd, &line);
-        parse_line(line, textures);
+        parse_line(line, tx);
         free(line);
     }
     close(fd);
-	parse_plr(textures, all);
-	all->textures = *textures;
-	all->plr = textures->plr;
-	all->map = textures->map;
+	parse_plr(tx, all);
+	all->tx = *tx;
+	all->plr = tx->plr;
+	all->map = tx->map;
 	all->save = 0;
-    if (!(check_valid(*textures)))
+    if (!(check_valid(*tx)))
         return (0);
     return (1);
 }

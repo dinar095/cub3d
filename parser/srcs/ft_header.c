@@ -12,7 +12,7 @@
 
 #include "../../game/ft_game.h"
 
-void	get_num_fromline(t_textures *textures, char **line)
+void	get_num_fromline(t_tx *textures, char **line)
 {
 	*line = *line + 2;
 	textures->width = ft_atoi(*line);
@@ -52,7 +52,7 @@ void	get_color_fromline(char **line, int *n)
 	b = ft_atoi(*line);
 	*n = create_trgb(0, r, g, b);
 }
-int 	check_header(t_textures *textures)
+int 	check_header(t_tx *textures)
 {
 	int i;
 

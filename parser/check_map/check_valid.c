@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 09:25:16 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/11 09:51:38 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/11 12:23:54 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int check_map_height(char **map, int i, int j)
             len = (ft_strlen(map[i]) >= j ? 1 : 0);
     return (flag == 1 ? 1 : 0);
 }
-int	check_valid(t_textures textures)
+int	check_valid(t_tx tx)
 {
     char **m;
     int i;
@@ -64,7 +64,7 @@ int	check_valid(t_textures textures)
 
     flag = 1;
     i = -1;
-    m = textures.map;
+    m = tx.map;
     while (flag == 1 && m[++i])//проверяем построчно верность
     {
         j = -1;

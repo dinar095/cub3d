@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/10 17:08:41 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/11 12:27:44 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ typedef struct	s_textures
 	char		**map;
 	t_plr 		plr;
 	t_cord		spr;
-}				t_textures;
+}				t_tx;
 typedef struct s_sprite
 {
 	t_cord	pos;
@@ -122,20 +122,20 @@ typedef struct	s_all
 	t_data		txre_img[5];
 	t_plr		plr;
 	char		**map;
-	t_textures	textures;
-	t_sprite 	*sprite;
+	t_tx	tx;
+	t_sprite 	*sp;
 	t_cord		ray0;
 	int			save;
 	t_cord		si_co;
 }				t_all;
 
-void			get_num_fromline(t_textures *textures, char **line);
+void			get_num_fromline(t_tx *textures, char **line);
 void			get_char_fromline(char **line, char **texture);
 int				create_trgb(int t, int r, int g, int b);
 void			get_color_fromline(char **line, int *n);
-int				check_header(t_textures *textures);
-int				check_valid(t_textures textures);
-int				open_file(char *file, t_textures *textures, t_all *all);
+int				check_header(t_tx *textures);
+int				check_valid(t_tx tx);
+int				open_file(char *file, t_tx *tx, t_all *all);
 int				is_wall_cord(char **map,t_cord dot, t_cord ray);
 void			scale_pix(t_all *all, char **map);
 void			init_img(t_all *all);
@@ -157,7 +157,7 @@ void			null_sprites(t_all *all);
 void			err(char *s);
 void			sort_sprite(t_all *all);
 double			print_sprite(t_all *all, double *zBuf);
-void			draw_sprite(t_all *all, t_sprite spr, double *zBuf);
+void			draw_sprite(t_all *all, t_sprite spr, double *zbuf);
 void			init_sprite(t_all *all,t_cord cross);
 void			check_display_resolution(t_all *all);
 void			screen_image(t_all *all);

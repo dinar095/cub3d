@@ -1,1 +1,1 @@
-norminette ./game/srcs.c
+norminettev2 ./game/srcs.c
