@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/11 14:53:15 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/13 20:56:35 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ int				is_wall_cord(char **map, t_cord dot, t_cord ray)
 		y = (int)ceil(dot.y) - 1;
 	else
 		y = (int)dot.y;
-	if (map[y][x] != '0')
+	if (map[y][x] != '0' && map[y][x] != '2')
 		return (1);
 	else
 		return (0);
