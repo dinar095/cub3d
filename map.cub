@@ -1,4 +1,4 @@
-R 600 900
+R 1500 2147483647
 NO ./textures/bricks.xpm
 SO ./textures/woolsnow.xpm
 WE ./textures/sand.xpm

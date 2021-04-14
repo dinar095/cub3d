@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 09:25:16 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/14 20:10:40 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/14 20:21:19 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	check_valid(t_tx tx)
     flag = 1;
     i = -1;
     m = tx.map;
-    while (flag == 1 && m[++i])
+    while (tx.map != NULL && flag == 1 && m[++i])
     {
         j = -1;
         while (flag == 1 && m[i][++j])
