@@ -66,13 +66,13 @@ static void		parse_line(char *line, t_tx *tx)
 {
 	if (!(ft_strncmp(line, "R ", 2)))
 		get_num_fromline(tx, &line);
-	else if (!(ft_strncmp(line, "NO", 2)))
+	else if (!(ft_strncmp(line, "NO ", 2)))
 		get_char_fromline(&line, &(tx->no));
-	else if (!(ft_strncmp(line, "SO", 2)))
+	else if (!(ft_strncmp(line, "SO ", 2)))
 		get_char_fromline(&line, &(tx->so));
-	else if (!(ft_strncmp(line, "WE", 2)))
+	else if (!(ft_strncmp(line, "WE ", 2)))
 		get_char_fromline(&line, &(tx->we));
-	else if (!(ft_strncmp(line, "EA", 2)))
+	else if (!(ft_strncmp(line, "EA ", 2)))
 		get_char_fromline(&line, &(tx->ea));
 	else if (!(ft_strncmp(line, "S ", 2)))
 		get_char_fromline(&line, &(tx->s));
