@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 17:45:56 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/14 20:06:04 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/14 20:06:57 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,6 @@ int		check_header(t_tx *textures)
 
 void		h_err(t_tx *tx)
 {
-	int i;
-
-	i = 0;
 	if (!(tx->width > 0 && tx->height > 0))
 		err("Invalid resolution");
 	if (!(tx->f > -1 && tx->c > -1))

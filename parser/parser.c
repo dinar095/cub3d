@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/14 20:06:57 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/14 20:16:13 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,12 +131,12 @@ void			parse_plr(t_tx *tx, t_all *all)
 	{
 		i_j.j = -1;
 		while (tx->map[i_j.i][++i_j.j])
-			if (ft_strchr("NSEW01", tx->map[i_j.i][i_j.j]))
+			if (ft_strchr("NSEW01 ", tx->map[i_j.i][i_j.j]))
 				cr_plr(tx, i_j);
 			else if (tx->map[i_j.i][i_j.j] == '2')
 				art[w++] = v_set(i_j.j + 0.5, i_j.i + 0.5);
 			else
-				err("Invalid arguments");
+				err("Invalid arguments in map");
 	}
 	mem_sprt(all, art, w);
 }
@@ -159,12 +159,12 @@ int				open_file(char *file, t_tx *tx, t_all *all)
 	}
 	close(fd);
 	h_err(tx);
+	if (!(check_valid(*tx)))
+		err("Invalid map");
 	parse_plr(tx, all);
 	all->tx = *tx;
 	all->plr = tx->plr;
 	all->map = tx->map;
 	all->save = 0;
-	if (!(check_valid(*tx)))
-		return (0);
 	return (1);
 }

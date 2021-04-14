@@ -206,7 +206,7 @@ int				is_wall_cord(char **map, t_cord dot, t_cord ray)
 		y = (int)ceil(dot.y) - 1;
 	else
 		y = (int)dot.y;
-	if (map[y][x] != '0' && map[y][x] != '2')
+	if (map[y][x] != '0' && map[y][x] != '2' && map[y][x] != ' ' )
 		return (1);
 	else
 		return (0);
