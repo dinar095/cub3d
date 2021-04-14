@@ -1,5 +1,5 @@
-R    1200     800
-NO     ./textures/bricks.xpm
+R 600      900
+NO ./textures/bricks.xpm
 SO ./textures/woolsnow.xpm
 WE ./textures/sand.xpm
 EA ./textures/glass.xpm

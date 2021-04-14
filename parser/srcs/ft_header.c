@@ -18,6 +18,8 @@ void	get_num_fromline(t_tx *textures, char **line)
 	textures->width = ft_atoi(*line);
 	while (**line >= '0' && **line <= '9')
 		(*line)++;
+	while (**line != '\0' && **line == ' ')
+		(*line)++;
 	textures->height = ft_atoi(*line);
 }
 
