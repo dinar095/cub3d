@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/11 15:29:43 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/14 20:06:57 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ static char		**map_join(char ***map, char **line)
 
 static void		get_map(t_tx *tx, char **line)
 {
-	if (!(check_header(tx)))
-		return ;
+	h_err(tx);
 	if ((**line == '\n' || **line == '\0' || **line == '0') && tx->map == NULL)
 		return ;
 	tx->map = map_join(&tx->map, line);
@@ -80,7 +79,8 @@ static void		parse_line(char *line, t_tx *tx)
 		get_color_fromline(&line, &(tx->f));
 	else if (!(ft_strncmp(line, "C ", 2)))
 		get_color_fromline(&line, &(tx->c));
-	get_map(tx, &line);
+	else if (check_header(tx))
+		get_map(tx, &line);
 }
 
 void			cr_pos(t_tx *tx, t_int dir, t_int pos)
@@ -158,6 +158,7 @@ int				open_file(char *file, t_tx *tx, t_all *all)
 		free(line);
 	}
 	close(fd);
+	h_err(tx);
 	parse_plr(tx, all);
 	all->tx = *tx;
 	all->plr = tx->plr;

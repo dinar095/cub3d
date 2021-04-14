@@ -1,11 +1,11 @@
-R 600      900
+R 600 900
 NO ./textures/bricks.xpm
 SO ./textures/woolsnow.xpm
 WE ./textures/sand.xpm
 EA ./textures/glass.xpm
 S ./textures/barrel.xpm
-F       220   ,     151  ,    255
-C 80,80,80
+F 0, 191, 255
+C 152, 191, 106
 
 11111111111111111111111111111111
 10000002222222222222222222222221

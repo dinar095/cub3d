@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/11 15:25:35 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/14 19:09:34 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,11 +129,11 @@ typedef struct	s_all
 	t_cord		si_co;
 }				t_all;
 
-void			get_num_fromline(t_tx *textures, char **line);
+void			get_num_fromline(t_tx *tx, char **line);
 void			get_char_fromline(char **line, char **texture);
 int				create_trgb(int t, int r, int g, int b);
 void			get_color_fromline(char **line, int *n);
-int				check_header(t_tx *textures);
+int				check_header(t_tx *tx);
 int				check_valid(t_tx tx);
 int				open_file(char *file, t_tx *tx, t_all *all);
 int				is_wall_cord(char **map,t_cord dot, t_cord ray);
@@ -164,4 +164,5 @@ void			screen_image(t_all *all);
 int				check_ext(const char *f_name);
 double			print_wall(t_cord crs, t_all *all, t_int x_s, t_cord ray);
 t_int			v_int(int val_x, int val_y);
+void			h_err(t_tx *tx);
 #endif
