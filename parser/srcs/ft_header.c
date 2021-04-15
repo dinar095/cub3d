@@ -34,7 +34,13 @@ int		create_trgb(int t, int r, int g, int b)
 {
 	return (t << 24 | r << 16 | g << 8 | b);
 }
-
+void	g_next(char **line)
+{
+	while (**line >= '0' && **line <= '9' || **line == ' ')
+		(*line)++;
+	if (**line == ',')
+		(*line)++;
+}
 void	get_color_fromline(char **line, int *n)
 {
 	int r;
@@ -43,17 +49,11 @@ void	get_color_fromline(char **line, int *n)
 
 	*line = *line + 2;
 	r = ft_atoi(*line);
-	while (**line >= '0' && **line <= '9' || **line == ' ')
-		(*line)++;
-	(*line)++;
+	g_next(line);
 	g = ft_atoi(*line);
-	while (**line >= '0' && **line <= '9' || **line == ' ')
-		(*line)++;
-	(*line)++;
+	g_next(line);
 	b = ft_atoi(*line);
-	while (**line >= '0' && **line <= '9' || **line == ' ')
-		(*line)++;
-	(*line)++;
+	g_next(line);
 	if (r > 256 || g > 256 || b > 256 || r < 0 || g < 0 || b < 0 || ft_isalpha(**line))
 		err("Invalid color");
 	*n = create_trgb(0, r, g, b);

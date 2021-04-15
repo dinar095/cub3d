@@ -65,7 +65,9 @@ int	check_valid(t_tx tx)
     flag = 1;
     i = -1;
     m = tx.map;
-    while (tx.map != NULL && flag == 1 && m[++i])
+    if (tx.map == NULL)
+		return (0);
+    while (flag == 1 && m[++i])
     {
         j = -1;
         while (flag == 1 && m[i][++j])
