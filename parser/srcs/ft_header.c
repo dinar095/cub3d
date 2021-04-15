@@ -41,12 +41,27 @@ void	g_next(char **line)
 	if (**line == ',')
 		(*line)++;
 }
+static int cnt(char **line)
+{
+	int i;
+	int cnt;
+
+	i = -1;
+	cnt = 0;
+	while ((*line)[++i] != '\0')
+		if ((*line)[i] == ',')
+			cnt++;
+	return (cnt == 2 ? 1 : 0);
+}
 void	get_color_fromline(char **line, int *n)
 {
 	int r;
 	int g;
 	int b;
 
+
+	if (!(cnt(line)))
+		err("Invalid color");
 	*line = *line + 2;
 	r = ft_atoi(*line);
 	g_next(line);
