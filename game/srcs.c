@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/16 18:16:55 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/16 18:23:22 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -386,7 +386,7 @@ void			sort_sprite(t_all *all)
 	int			i;
 
 	i = 1;
-	while (i < all->sp[0].co)
+	while (i < all->spr_co)
 	{
 		nwsprt = all->sp[i];
 		location = i - 1;
