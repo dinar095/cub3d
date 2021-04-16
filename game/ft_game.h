@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/16 18:16:18 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/16 18:29:17 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,8 @@ typedef struct s_sprite
 {
 	t_cord	pos;
 	double	h;
-	double	w;
 	int 	cent;
 	double 	dist;
-	int 	co;
 	int		vis;
 
 }				t_sprite;
