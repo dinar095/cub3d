@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 17:45:56 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/14 20:06:57 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/16 17:26:26 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,41 +34,26 @@ int		create_trgb(int t, int r, int g, int b)
 {
 	return (t << 24 | r << 16 | g << 8 | b);
 }
-void	g_next(char **line)
-{
-	while (**line >= '0' && **line <= '9' || **line == ' ')
-		(*line)++;
-	if (**line == ',')
-		(*line)++;
-}
-static int cnt(char **line)
-{
-	int i;
-	int cnt;
 
-	i = -1;
-	cnt = 0;
-	while ((*line)[++i] != '\0')
-		if ((*line)[i] == ',')
-			cnt++;
-	return (cnt == 2 ? 1 : 0);
-}
 void	get_color_fromline(char **line, int *n)
 {
 	int r;
 	int g;
 	int b;
 
-
-	if (!(cnt(line)))
-		err("Invalid color");
 	*line = *line + 2;
 	r = ft_atoi(*line);
-	g_next(line);
+	while (**line >= '0' && **line <= '9' || **line == ' ')
+		(*line)++;
+	(*line)++;
 	g = ft_atoi(*line);
-	g_next(line);
+	while (**line >= '0' && **line <= '9' || **line == ' ')
+		(*line)++;
+	(*line)++;
 	b = ft_atoi(*line);
-	g_next(line);
+	while (**line >= '0' && **line <= '9' || **line == ' ')
+		(*line)++;
+	(*line)++;
 	if (r > 256 || g > 256 || b > 256 || r < 0 || g < 0 || b < 0 || ft_isalpha(**line))
 		err("Invalid color");
 	*n = create_trgb(0, r, g, b);

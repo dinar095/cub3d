@@ -6,13 +6,13 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/14 20:21:19 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/16 18:24:02 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../game/ft_game.h"
 
-static void		reset_textures(t_tx *tx)
+static void		reset_textures(t_tx *tx, t_all *all)
 {
 	tx->width = -1;
 	tx->height = -1;
@@ -25,6 +25,8 @@ static void		reset_textures(t_tx *tx)
 	tx->c = -1;
 	tx->map = NULL;
 	tx->plr.dir.y = -2;
+	all->spr_co = 0;
+
 }
 
 static char		**map_join(char ***map, char **line)
@@ -92,17 +94,14 @@ void			cr_pos(t_tx *tx, t_int dir, t_int pos)
 	tx->map[pos.i][pos.j] = '0';
 }
 
-void			mem_sprt(t_all *all, t_cord *art, int w)
+void			mem_sprt(t_all *all, t_cord *art)
 {
 	int i;
 
 	i = -1;
-	all->sp = (t_sprite *)malloc(sizeof(t_sprite) * w);
-	while (++i < w)
-	{
+	all->sp = (t_sprite *)malloc(sizeof(t_sprite) * all->spr_co);
+	while (++i < all->spr_co)
 		all->sp[i].pos = art[i];
-		all->sp[i].co = w;
-	}
 }
 
 void			cr_plr(t_tx *tx, t_int i_j)
@@ -122,7 +121,7 @@ void			cr_plr(t_tx *tx, t_int i_j)
 void			parse_plr(t_tx *tx, t_all *all)
 {
 	t_int	i_j;
-	int		w;
+	int w;
 	t_cord	art[500];
 
 	i_j.i = -1;
@@ -138,7 +137,11 @@ void			parse_plr(t_tx *tx, t_all *all)
 			else
 				err("Invalid arguments in map");
 	}
-	mem_sprt(all, art, w);
+	if (tx->plr.dir.y == -2)
+		err("No player in map");
+	all->spr_co = w;
+	if (all->spr_co > 0)
+		mem_sprt(all, art);
 }
 
 int				open_file(char *file, t_tx *tx, t_all *all)
@@ -147,7 +150,7 @@ int				open_file(char *file, t_tx *tx, t_all *all)
 	char	*line;
 	int		len;
 
-	reset_textures(tx);
+	reset_textures(tx, all);
 	len = 1;
 	if ((fd = open(file, O_RDONLY)) == -1)
 		err("Error file");

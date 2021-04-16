@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/14 19:09:34 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/16 18:16:18 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ typedef struct	s_all
 	t_cord		ray0;
 	int			save;
 	t_cord		si_co;
+	int 		spr_co;
 }				t_all;
 
 void			get_num_fromline(t_tx *tx, char **line);
@@ -156,7 +157,7 @@ t_cord			is_sprite(char **map,t_cord dot, t_cord ray);
 void			null_sprites(t_all *all);
 void			err(char *s);
 void			sort_sprite(t_all *all);
-double			print_sprite(t_all *all, double *zbuf);
+void			print_sprite(t_all *all, double *zbuf);
 void			draw_sprite(t_all *all, t_sprite spr, double *zbuf);
 void			init_sprite(t_all *all,t_cord cross);
 void			check_display_resolution(t_all *all);

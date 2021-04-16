@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 09:25:16 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/14 20:21:19 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/16 17:26:27 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	check_valid(t_tx tx)
     i = -1;
     m = tx.map;
     if (tx.map == NULL)
-		return (0);
+    	err("Empty map");
     while (flag == 1 && m[++i])
     {
         j = -1;

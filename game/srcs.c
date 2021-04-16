@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/13 20:56:35 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/16 18:16:55 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -320,7 +320,7 @@ void			init_sprite(t_all *all, t_cord cross)
 	int		znak;
 
 	i = -1;
-	while (++i < all->sp->co)
+	while (++i < all->spr_co)
 	{
 		if ((int)all->sp[i].pos.x == (int)cross.x
 			&& (int)all->sp[i].pos.y == (int)cross.y && all->sp[i].vis == 0)
@@ -363,16 +363,16 @@ void			draw_sprite(t_all *all, t_sprite spr, double *zbuf)
 		}
 }
 
-double			print_sprite(t_all *all, double *zbuf)
+void		print_sprite(t_all *all, double *zbuf)
 {
 	int	i;
 
 	i = -1;
-	while (++i < all->sp->co)
+	while (++i < all->spr_co)
 		all->sp[i].dist = len_ray(all->sp[i].pos, all->plr.pos);
 	sort_sprite(all);
 	i = -1;
-	while (++i < all->sp->co)
+	while (++i < all->spr_co)
 	{
 		if (all->sp[i].vis)
 			draw_sprite(all, all->sp[i], zbuf);
@@ -436,7 +436,7 @@ void			null_sprites(t_all *all)
 	int	i;
 
 	i = -1;
-	while (++i < all->sp->co)
+	while (++i < all->spr_co)
 		all->sp[i].vis = 0;
 }
 
