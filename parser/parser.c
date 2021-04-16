@@ -129,6 +129,8 @@ void			parse_plr(t_tx *tx, t_all *all)
 	while (tx->map[++i_j.i])
 	{
 		i_j.j = -1;
+		if (tx->map[i_j.i][0] == '\0')
+			err("Invalid map");
 		while (tx->map[i_j.i][++i_j.j])
 			if (ft_strchr("NSEW01 ", tx->map[i_j.i][i_j.j]))
 				cr_plr(tx, i_j);
