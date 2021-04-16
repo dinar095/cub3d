@@ -120,10 +120,10 @@ typedef struct	s_all
 	t_data		txre_img[5];
 	t_plr		plr;
 	char		**map;
-	t_tx	tx;
+	t_tx		tx;
 	t_sprite 	*sp;
 	t_cord		ray0;
-	int			save;
+	int			scsht;
 	t_cord		si_co;
 	int 		spr_co;
 }				t_all;

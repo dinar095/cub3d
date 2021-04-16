@@ -302,7 +302,7 @@ void			check_display_resolution(t_all *all)
 	int	wide;
 	int	height;
 
-	if (!all->save)
+	if (!all->scsht)
 	{
 		mlx_get_screen_size(all->win.mlx, &wide, &height);
 		if (wide < all->tx.width)

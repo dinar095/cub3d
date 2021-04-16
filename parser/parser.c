@@ -170,6 +170,5 @@ int				open_file(char *file, t_tx *tx, t_all *all)
 	all->tx = *tx;
 	all->plr = tx->plr;
 	all->map = tx->map;
-	all->save = 0;
 	return (1);
 }
