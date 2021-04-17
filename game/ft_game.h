@@ -149,7 +149,7 @@ t_cord			net_point(t_cord ray, t_cord pos);
 void			init_texture(t_all *all);
 t_cord			fwd_pnt(t_cord ray, t_cord pnt, int flag);
 int				key_hook(int keycode, t_all *all);
-void			draw_screen(t_all *all);
+int 			draw_screen(t_all *all);
 t_cord 			v_set(double val_x, double val_y);
 t_cord			is_sprite(char **map,t_cord dot, t_cord ray);
 void			null_sprites(t_all *all);
