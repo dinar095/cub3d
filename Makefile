@@ -4,6 +4,7 @@ SRCS	= parser/check_map/check_valid.c \
 			parser/gnl/get_next_line.c \
 			parser/gnl/get_next_line_utils.c \
 			parser/srcs/ft_header.c \
+			parser/srcs/cheakers.c \
 			parser/parser.c \
 			main.c \
 			game/srcs.c \

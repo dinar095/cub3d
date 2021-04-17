@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 19:55:43 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 19:56:09 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -445,7 +445,7 @@ void			null_sprites(t_all *all)
 		all->sp[i].vis = 0;
 }
 
-int			err(char *s)
+int				err(char *s)
 {
 	ft_putstr_fd("Error\n", 1);
 	ft_putstr_fd(s, 1);

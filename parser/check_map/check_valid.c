@@ -6,11 +6,25 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 09:25:16 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 19:48:54 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 21:23:54 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../game/ft_game.h"
+
+int			ch_err(char **map, int t, int j, int i)
+{
+	int len;
+
+	len = 1;
+	if (map[i + 1])
+		len = ((int)ft_strlen(map[i + 1]) >= j ? 1 : 0);
+	else if (!(map[i + 1]))
+		len = ((int)ft_strlen(map[i]) >= j ? 1 : 0);
+	else if (map[t][j] == ' ')
+		err("Space in map");
+	return (len);
+}
 
 static int	check_map_wide(char **map, int i, int j)
 {
@@ -56,12 +70,8 @@ static int	check_map_height(char **map, int i, int j)
 	while (flag == 2 && map[++i] && len)
 		if (map[i][j] == '1')
 			flag = 1;
-		else if (map[i + 1])
-			len = ((int)ft_strlen(map[i + 1]) >= j ? 1 : 0);
-		else if (!(map[i + 1]))
-			len = ((int)ft_strlen(map[i]) >= j ? 1 : 0);
-		else if (map[t][j] == ' ')
-			err("Space in map");
+		else
+			len = ch_err(map, t, j, i);
 	return (flag == 1 ? 1 : 0);
 }
 

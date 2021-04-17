@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 20:19:23 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 20:21:18 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void			my_mlx_pixel_put(t_all *all, int x, int y, int color);
 void			init_img(t_all *all);
 void			init_texture(t_all *all);
 void			null_sprites(t_all *all);
-int 			err(char *s);
+int				err(char *s);
 void			sort_sprite(t_all *all);
 void			print_sprite(t_all *all, double *zbuf);
 void			draw_sprite(t_all *all, t_sprite spr, double *zbuf);

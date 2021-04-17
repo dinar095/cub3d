@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 18:32:09 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 19:49:57 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void		get_map(t_tx *tx, char **line)
 	tx->map = map_join(&tx->map, line);
 }
 
-int			ch_double_tx(char *tx)
+int				ch_double_tx(char *tx)
 {
 	if (tx == NULL)
 		return (1);
@@ -71,7 +71,7 @@ int			ch_double_tx(char *tx)
 	return (0);
 }
 
-int			ch_double_col(int col)
+int				ch_double_col(int col)
 {
 	if (col == -1)
 		return (1);
