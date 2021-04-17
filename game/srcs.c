@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 13:07:34 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 17:59:41 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ int				is_wall_cord(char **map, t_cord dot, t_cord ray)
 		y = (int)ceil(dot.y) - 1;
 	else
 		y = (int)dot.y;
-	if (map[y][x] != '0' && map[y][x] != '2' && map[y][x] != ' ' )
+	if (map[y][x] != '0' && map[y][x] != '2' && map[y][x] != ' ')
 		return (1);
 	else
 		return (0);
@@ -265,7 +265,6 @@ void			go_f(t_all *all, int keycode)
 	}
 	if (!(is_wall_cord(all->map, tmp, all->plr.dir)))
 		all->plr.pos = tmp;
-
 }
 
 void			go_dir(t_all *all, int keycode)
@@ -301,7 +300,6 @@ void			check_display_resolution(t_all *all)
 {
 	int	wide;
 	int	height;
-
 
 	if (all->save == 0)
 	{
@@ -366,7 +364,7 @@ void			draw_sprite(t_all *all, t_sprite spr, double *zbuf)
 		}
 }
 
-void		print_sprite(t_all *all, double *zbuf)
+void			print_sprite(t_all *all, double *zbuf)
 {
 	int	i;
 

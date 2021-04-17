@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 13:24:50 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/10 18:28:14 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 18:02:11 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,4 @@ char				**ft_split(char const *s, char c);
 char				*ft_itoa_uhex(long unsigned int n);
 
 char				*ft_uitoa(unsigned int n);
-
-
 #endif

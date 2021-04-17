@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 17:45:56 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 17:36:21 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 18:30:57 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +61,15 @@ int		at_karusel(char **line, int flag)
 	}
 	return (c);
 }
+
 void	get_color_fromline(char **line, int *n)
 {
 	int r;
 	int g;
 	int b;
-	int i;
 	int c;
 
-	i = -1;
 	c = 0;
-//	while ((*line)[++i] != '\0')
-//		if ((*line)[i] == ',')
-//			c++;
 	*line = *line + 2;
 	r = ft_atoi(*line);
 	c += at_karusel(line, 0);
@@ -81,7 +77,7 @@ void	get_color_fromline(char **line, int *n)
 	c += at_karusel(line, 0);
 	b = ft_atoi(*line);
 	at_karusel(line, 1);
-	if (**line != '\0'|| b < 0 || r > 256
+	if (**line != '\0' || b < 0 || r > 256
 		|| g > 256 || b > 256 || r < 0 || g < 0 || c != 2)
 		err("Invalid color");
 	*n = create_trgb(0, r, g, b);
@@ -94,13 +90,13 @@ void	ch_pth(char *txre)
 	if ((fd = open(txre, O_RDONLY)) == -1)
 		err("Invalid texture path");
 	close(fd);
-
 	if ((fd = open(txre, O_DIRECTORY)) != -1)
 	{
 		close(fd);
 		err("Texture path is directory");
 	}
 }
+
 int		ch_path(t_tx *tx)
 {
 	ch_pth(tx->no);
@@ -108,8 +104,8 @@ int		ch_path(t_tx *tx)
 	ch_pth(tx->we);
 	ch_pth(tx->ea);
 	return (1);
-
 }
+
 int		check_header(t_tx *textures)
 {
 	int i;
@@ -128,7 +124,7 @@ int		check_header(t_tx *textures)
 	return (i == 5 ? 1 : 0);
 }
 
-void		h_err(t_tx *tx)
+void	h_err(t_tx *tx)
 {
 	if (!(tx->width > 0 && tx->height > 0))
 		err("Invalid resolution");
@@ -137,4 +133,3 @@ void		h_err(t_tx *tx)
 	if (!(tx->no && tx->so && tx->we && tx->ea && tx->s))
 		err("Invalid textures");
 }
-

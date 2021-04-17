@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 16:58:01 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 18:32:09 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static void		reset_textures(t_tx *tx, t_all *all)
 	tx->map = NULL;
 	tx->plr.dir.y = -2;
 	all->spr_co = 0;
-
 }
 
 static char		**map_join(char ***map, char **line)
@@ -137,7 +136,7 @@ void			cr_plr(t_tx *tx, t_int i_j)
 void			parse_plr(t_tx *tx, t_all *all)
 {
 	t_int	i_j;
-	int w;
+	int		w;
 	t_cord	art[10000];
 
 	i_j.i = -1;
