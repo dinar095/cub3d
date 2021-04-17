@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 20:21:18 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 21:24:59 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,4 +160,5 @@ int				is_wall_cord(char **map, t_cord dot, t_cord ray);
 int				key_hook(int keycode, t_all *all);
 int				draw_screen(t_all *all);
 int				check_ext(const char *f_name);
+int				ch_double_tx(char *tx);
 #endif

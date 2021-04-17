@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 09:25:16 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 21:23:54 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 21:25:21 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,13 @@ int			check_valid(t_tx tx)
 			}
 	}
 	return (flag);
+}
+
+int				ch_double_tx(char *tx)
+{
+	if (tx == NULL)
+		return (1);
+	else
+		err("Double texture path");
+	return (0);
 }
