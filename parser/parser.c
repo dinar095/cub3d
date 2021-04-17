@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 12:42:38 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 16:50:54 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,23 +63,39 @@ static void		get_map(t_tx *tx, char **line)
 	tx->map = map_join(&tx->map, line);
 }
 
+int				ch_double_tx(char *tx)
+{
+	if (tx == NULL)
+		return (1);
+	else
+		err("Double texture path");
+}
+
+int				ch_double_col(int col)
+{
+	if (col == -1)
+		return (1);
+	else
+		err("Double color");
+}
+
 static void		parse_line(char *line, t_tx *tx)
 {
 	if (!(ft_strncmp(line, "R ", 2)))
 		get_num_fromline(tx, &line);
-	else if (!(ft_strncmp(line, "NO ", 2)))
+	else if (!(ft_strncmp(line, "NO ", 3)) && ch_double_tx(tx->no))
 		get_char_fromline(&line, &(tx->no));
-	else if (!(ft_strncmp(line, "SO ", 2)))
+	else if (!(ft_strncmp(line, "SO ", 3)) && ch_double_tx(tx->so))
 		get_char_fromline(&line, &(tx->so));
-	else if (!(ft_strncmp(line, "WE ", 2)))
+	else if (!(ft_strncmp(line, "WE ", 3)) && ch_double_tx(tx->we))
 		get_char_fromline(&line, &(tx->we));
-	else if (!(ft_strncmp(line, "EA ", 2)))
+	else if (!(ft_strncmp(line, "EA ", 3)) && ch_double_tx(tx->ea))
 		get_char_fromline(&line, &(tx->ea));
-	else if (!(ft_strncmp(line, "S ", 2)))
+	else if (!(ft_strncmp(line, "S ", 2)) && ch_double_tx(tx->s))
 		get_char_fromline(&line, &(tx->s));
-	else if (!(ft_strncmp(line, "F ", 2)))
+	else if (!(ft_strncmp(line, "F ", 2)) && ch_double_col(tx->f))
 		get_color_fromline(&line, &(tx->f));
-	else if (!(ft_strncmp(line, "C ", 2)))
+	else if (!(ft_strncmp(line, "C ", 2)) && ch_double_col(tx->c))
 		get_color_fromline(&line, &(tx->c));
 	else if (check_header(tx))
 		get_map(tx, &line);

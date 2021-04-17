@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 16:31:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 14:27:06 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 17:14:27 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int		ft_atoi(const char *str)
 		minus = -1;
 	if (*str == '-' || *str == '+')
 		str++;
+	if (!(ft_isdigit(*str)))
+		return (-1);
 	while (*str >= '0' && *str <= '9')
 	{
 		num = (num * 10) + *str - '0';
