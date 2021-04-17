@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 12:41:41 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 12:42:38 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void			parse_plr(t_tx *tx, t_all *all)
 {
 	t_int	i_j;
 	int w;
-	t_cord	art[500];
+	t_cord	art[10000];
 
 	i_j.i = -1;
 	w = 0;
