@@ -1,5 +1,5 @@
 ##
-## Makefile for MiniLibX in /home/boulon/work/c/raytraceur/minilibx
+## Makefile for MiniLibX in /home/boulon/work/c/raytraceur/libmlx_mac
 ## 
 ## Made by Olivier Crouzet
 ## Login   <ol@epitech.net>

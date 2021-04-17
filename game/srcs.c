@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 17:59:41 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 19:55:43 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ unsigned int	vis(t_all *all, t_int s_t, t_cord cross, t_cord ray)
 	int	tmp1;
 	int	wall;
 
+	wall = 0;
+	tmp1 = 0;
 	if (s_t.i == 1)
 	{
 		if (ray.y > 0)
@@ -167,6 +169,7 @@ unsigned int	get_color(t_data txre_img, int x, int y)
 		dst = txre_img.addr + (y * txre_img.line_l + x * (txre_img.bpp / 8));
 		return (*(unsigned int *)dst);
 	}
+	return (0);
 }
 
 t_cord			fwd_pnt(t_cord ray, t_cord pnt, int flag)
@@ -294,6 +297,7 @@ int				key_hook(int keycode, t_all *all)
 		all->plr.dir = rttz(all->plr.dir, 7, v_set(0.99, -0.12));
 	if (keycode == ESC)
 		exit(EXIT_SUCCESS);
+	return (0);
 }
 
 void			check_display_resolution(t_all *all)
@@ -441,11 +445,12 @@ void			null_sprites(t_all *all)
 		all->sp[i].vis = 0;
 }
 
-void			err(char *s)
+int			err(char *s)
 {
 	ft_putstr_fd("Error\n", 1);
 	ft_putstr_fd(s, 1);
 	exit(1);
+	return (1);
 }
 
 double			angle(t_cord begin, t_cord end)

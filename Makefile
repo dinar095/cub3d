@@ -13,7 +13,7 @@ OBJS		= $(patsubst %.c, %.o, $(SRCS))
 
 
 CC			= gcc
-FLAGS		= #-Wall -Wextra -Werror
+FLAGS		= -Wall -Wextra -Werror
 HEADER		= game/ft_game.h
 
 RM			= rm -f
@@ -21,11 +21,10 @@ RM			= rm -f
 all:		init ${NAME}
 
 init:
-			@ echo "......init...LINUX..."
 			make -C libft
-			make -C minilibx
+			make -C libmlx_mac
 $(NAME):	$(OBJS) $(HEADER)
-			$(CC) $(FLAGS) ${OBJS} $(HEADER) -Llibft -Lminilibx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
+			$(CC) $(FLAGS) ${OBJS} -Llibft -Llibmlx_mac -lmlx -framework OpenGL -framework AppKit -lft -o $(NAME)
 
 
 %.o : %.c
@@ -39,13 +38,10 @@ fclean:		clean
 			$(RM) -rf $(NAME)
 			make -C libft fclean
 
-
-# 		!!!!!!!!	ADD FCLEAN FOR MLX          !!!!!!!!
-
-
 re:			fclean all
+norm:
+			norminettev2 $(SRCS)
+			norminettev2 $(HEADER)
+			norminettev2 libft/*.c
 
-.PHONY:		all clean fclean re
-
-# commands
-# http://rus-linux.net/nlib.php?name=/MyLDP/algol/gnu_make/gnu_make_3-79_russian_manual.html#SEC77
+.PHONY:		all clean fclean re norm

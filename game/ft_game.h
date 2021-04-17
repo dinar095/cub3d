@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 18:14:12 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 20:19:23 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 # include "../libft/libft.h"
 # include <math.h>
 
-# define SPD 0.29
+# define SPD 0.19
 # define ANG 46
 
 # ifdef __linux__
-#  include "../linminilibx/mlx.h"
+#  include "../libmlx_lin/mlx.h"
 #  define OS "LINUX"
 #  define ESC 65307
 #  define W 1731
@@ -39,7 +39,7 @@
 #  define SPACE 32
 #  define X 33
 # else
-#  include "../minilibx/mlx.h"
+#  include "../libmlx_mac/mlx.h"
 #  define OS "MAC"
 #  define ESC 53
 #  define W 13
@@ -145,7 +145,7 @@ void			my_mlx_pixel_put(t_all *all, int x, int y, int color);
 void			init_img(t_all *all);
 void			init_texture(t_all *all);
 void			null_sprites(t_all *all);
-void			err(char *s);
+int 			err(char *s);
 void			sort_sprite(t_all *all);
 void			print_sprite(t_all *all, double *zbuf);
 void			draw_sprite(t_all *all, t_sprite spr, double *zbuf);

@@ -1,5 +1,5 @@
 /*
-** mlx_int_wait_first_expose.c for minilibx in 
+** mlx_int_wait_first_expose.c for libmlx_mac in
 ** 
 ** Made by olivier crouzet
 ** Login   <ol@epita.fr>

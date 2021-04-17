@@ -62,20 +62,22 @@ static void		get_map(t_tx *tx, char **line)
 	tx->map = map_join(&tx->map, line);
 }
 
-int				ch_double_tx(char *tx)
+int			ch_double_tx(char *tx)
 {
 	if (tx == NULL)
 		return (1);
 	else
 		err("Double texture path");
+	return (0);
 }
 
-int				ch_double_col(int col)
+int			ch_double_col(int col)
 {
 	if (col == -1)
 		return (1);
 	else
 		err("Double color");
+	return (0);
 }
 
 static void		parse_line(char *line, t_tx *tx)

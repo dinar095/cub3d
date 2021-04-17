@@ -1,5 +1,5 @@
 //
-// mlx_int.h for minilibx
+// mlx_int.h for libmlx_mac
 //
 // ol@staff.42.fr
 //
