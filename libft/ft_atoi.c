@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 16:31:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/03/10 18:28:14 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 14:27:06 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int		ft_atoi(const char *str)
 {
 	int minus;
-	int num;
+	unsigned long num;
 
 	minus = 1;
 	num = 0;
@@ -30,6 +30,8 @@ int		ft_atoi(const char *str)
 	{
 		num = (num * 10) + *str - '0';
 		str++;
+		if (num > 2147483647)
+			return (-1);
 	}
 	return (num * minus);
 }

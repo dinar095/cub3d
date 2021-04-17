@@ -1,8 +1,8 @@
-R 1500 1584
+R 1500 600
 NO ./textures/bricks.xpm
 SO ./textures/woolsnow.xpm
 WE ./textures/sand.xpm
-EA    ./textures/glass.xpm
+EA  ./textures/glass.xpm
 S ./textures/barrel.xpm
 F 0, 191, 255
 C 152, 191, 106
@@ -29,4 +29,3 @@ C 152, 191, 106
 10000000000000000000000000000001
 10000000000000000000000000000001
 1111111111111111111111111111111
-
