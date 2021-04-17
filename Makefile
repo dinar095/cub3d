@@ -23,9 +23,9 @@ all:		init ${NAME}
 init:
 			@ echo "......init...LINUX..."
 			make -C libft
-			make -C linminilibx
+			make -C minilibx
 $(NAME):	$(OBJS) $(HEADER)
-			$(CC) $(FLAGS) ${OBJS} $(HEADER) -Llibft -lft -Llinminilibx -lmlx -lX11 -lm -lXext -lbsd -o $(NAME)
+			$(CC) $(FLAGS) ${OBJS} $(HEADER) -Llibft -Lminilibx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 
 
 %.o : %.c

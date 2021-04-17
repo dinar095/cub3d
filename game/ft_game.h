@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/16 18:29:17 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 12:39:43 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,10 @@ typedef struct	s_all
 	t_data		txre_img[5];
 	t_plr		plr;
 	char		**map;
-	t_tx		tx;
+	t_tx	tx;
 	t_sprite 	*sp;
 	t_cord		ray0;
-	int			scsht;
+	int			save;
 	t_cord		si_co;
 	int 		spr_co;
 }				t_all;

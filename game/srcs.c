@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:36 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/16 18:23:22 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 13:07:34 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,7 +302,8 @@ void			check_display_resolution(t_all *all)
 	int	wide;
 	int	height;
 
-	if (!all->scsht)
+
+	if (all->save == 0)
 	{
 		mlx_get_screen_size(all->win.mlx, &wide, &height);
 		if (wide < all->tx.width)
@@ -310,6 +311,8 @@ void			check_display_resolution(t_all *all)
 		if (height < all->tx.height)
 			all->tx.height = height;
 	}
+	else if (all->tx.width > 23000 || all->tx.height > 23000)
+		err("Hello booly");
 }
 
 void			init_sprite(t_all *all, t_cord cross)

@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 17:45:56 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/16 17:26:26 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 13:32:24 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,29 @@ void	get_color_fromline(char **line, int *n)
 		err("Invalid color");
 	*n = create_trgb(0, r, g, b);
 }
+void	ch_pth(char *txre)
+{
+	int fd;
 
+	if ((fd = open(txre, O_RDONLY)) == -1)
+		err("Invalid texture path");
+	close(fd);
+
+	if ((fd = open(txre, O_DIRECTORY)) != -1)
+	{
+		close(fd);
+		err("Texture path is directory");
+	}
+}
+int		ch_path(t_tx *tx)
+{
+	ch_pth(tx->no);
+	ch_pth(tx->so);
+	ch_pth(tx->we);
+	ch_pth(tx->ea);
+	return (1);
+
+}
 int		check_header(t_tx *textures)
 {
 	int i;
@@ -72,7 +94,9 @@ int		check_header(t_tx *textures)
 		i++;
 	if (textures->s)
 		i++;
-	return (i == 4 ? 1 : 0);
+	if (ch_path(textures))
+		i++;
+	return (i == 5 ? 1 : 0);
 }
 
 void		h_err(t_tx *tx)

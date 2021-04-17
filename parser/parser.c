@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 12:10:15 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/16 18:24:02 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/17 12:41:41 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,6 @@ void			parse_plr(t_tx *tx, t_all *all)
 	while (tx->map[++i_j.i])
 	{
 		i_j.j = -1;
-		if (tx->map[i_j.i][0] == '\0')
-			err("Invalid map");
 		while (tx->map[i_j.i][++i_j.j])
 			if (ft_strchr("NSEW01 ", tx->map[i_j.i][i_j.j]))
 				cr_plr(tx, i_j);
