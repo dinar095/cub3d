@@ -26,6 +26,12 @@ void	reset_textures(t_tx *tx, t_all *all)
 	tx->map = NULL;
 	tx->plr.dir.y = -2;
 	all->spr_co = 0;
+	all->w = 0;
+	all->s = 0;
+	all->a = 0;
+	all->d = 0;
+	all->lf = 0;
+	all->lr = 0;
 }
 
 void	get_num_fromline(t_tx *tx, char **line)

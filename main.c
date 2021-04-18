@@ -96,9 +96,10 @@ void	run(t_all *all)
 	all->si_co = v_set(cos(ANG * (M_PI / 180) / all->tx.width),
 					sin(ANG * (M_PI / 180) / all->tx.width));
 	draw_screen(all);
-	mlx_hook(all->win.mlx_win, 2, 1L << 0, key_hook, all);
+	mlx_hook(all->win.mlx_win, 2, 1L << 0, k_prs, all);
+	mlx_hook(all->win.mlx_win, 3, 1L << 1, k_rel, all);
 	mlx_hook(all->win.mlx_win, X, 1L << 0, err, "0");
-	mlx_loop_hook(all->win.mlx, draw_screen, all);
+	mlx_loop_hook(all->win.mlx, key_hook, all);
 	mlx_loop(all->win.mlx);
 }
 

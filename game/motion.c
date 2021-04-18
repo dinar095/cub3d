@@ -6,22 +6,22 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 09:12:43 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/18 09:12:43 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/18 13:33:49 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_game.h"
 
-void			go_f(t_all *all, int keycode)
+void			go_f(t_all *all)
 {
 	t_cord	tmp;
 
-	if (keycode == W)
+	if (all->w == 1)
 	{
 		tmp.x = all->plr.pos.x + all->plr.dir.x * SPD;
 		tmp.y = all->plr.pos.y + all->plr.dir.y * SPD;
 	}
-	else
+	if (all->s == 1)
 	{
 		tmp.x = all->plr.pos.x - all->plr.dir.x * SPD;
 		tmp.y = all->plr.pos.y - all->plr.dir.y * SPD;
@@ -30,33 +30,67 @@ void			go_f(t_all *all, int keycode)
 		all->plr.pos = tmp;
 }
 
-void			go_dir(t_all *all, int keycode)
+void			go_dir(t_all *all)
 {
 	t_cord	ndir;
 	t_cord	tmp;
 
-	if (keycode == A)
+	if (all->a == 1)
 		ndir = rttz(all->plr.dir, 0, v_set(0, -1));
-	else
+	else if (all->d == 1)
 		ndir = rttz(all->plr.dir, 0, v_set(0, 1));
 	tmp.x = all->plr.pos.x + ndir.x * SPD;
 	tmp.y = all->plr.pos.y + ndir.y * SPD;
 	if (!(is_wall_cord(all->map, tmp, ndir)))
 		all->plr.pos = tmp;
 }
-
-int				key_hook(int keycode, t_all *all)
+int				k_prs(int keycode, t_all *all)
 {
-	if (keycode == W || keycode == S)
-		go_f(all, keycode);
-	if (keycode == A || keycode == D)
-		go_dir(all, keycode);
+	if (keycode == W)
+		all->w = 1;
+	if (keycode == S)
+		all->s = 1;
+	if (keycode == A)
+		all->a = 1;
+	if (keycode == D)
+		all->d = 1;
 	if (keycode == LEFT)
-		all->plr.dir = rttz(all->plr.dir, -7, v_set(0.99, 0.12));
+		all->lf = 1;
 	if (keycode == RIGHT)
-		all->plr.dir = rttz(all->plr.dir, 7, v_set(0.99, -0.12));
+		all->lr = 1;
 	if (keycode == ESC)
 		exit(EXIT_SUCCESS);
+	return (0);
+}
+
+int				k_rel(int keycode, t_all *all)
+{
+	if (keycode == W)
+		all->w = 0;
+	if (keycode == S)
+		all->s = 0;
+	if (keycode == A)
+		all->a = 0;
+	if (keycode == D)
+		all->d = 0;
+	if (keycode == LEFT)
+		all->lf = 0;
+	if (keycode == RIGHT)
+		all->lr = 0;
+	return (0);
+}
+
+int				key_hook(t_all *all)
+{
+	if (all->w == 1 || all->s == 1)
+		go_f(all);
+	if (all->a == 1 || all->d == 1)
+		go_dir(all);
+	if (all->lf)
+		all->plr.dir = rttz(all->plr.dir, -2, v_set(0.99, 0.12));
+	if (all->lr)
+		all->plr.dir = rttz(all->plr.dir, 2, v_set(0.99, -0.12));
+	draw_screen(all);
 	return (0);
 }
 

@@ -124,6 +124,12 @@ typedef struct	s_all
 	int			save;
 	t_cord		si_co;
 	int			spr_co;
+	int			w;
+	int 		s;
+	int			a;
+	int			d;
+	int 		lf;
+	int 		lr;
 }				t_all;
 
 unsigned int	get_color(t_data txre_img, int x, int y);
@@ -161,12 +167,14 @@ char			**map_join(char ***map, char **line);
 void			get_map(t_tx *tx, char **line);
 void			parse_line(char *line, t_tx *tx);
 int				err(char *s);
+int				k_prs(int keycode, t_all *all);
+int				k_rel(int keycode, t_all *all);
 int				create_trgb(int t, int r, int g, int b);
 int				check_header(t_tx *tx);
 int				check_valid(t_tx tx);
 int				open_file(char *file, t_tx *tx, t_all *all);
 int				is_wall_cord(char **map, t_cord dot, t_cord ray);
-int				key_hook(int keycode, t_all *all);
+int				key_hook(t_all *all);
 int				draw_screen(t_all *all);
 int				check_ext(const char *f_name);
 int				ch_double_tx(char *tx);
