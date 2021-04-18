@@ -6,7 +6,7 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/20 18:02:47 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 21:24:59 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/18 08:50:17 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ typedef struct	s_all
 }				t_all;
 
 unsigned int	get_color(t_data txre_img, int x, int y);
+unsigned int	vis(t_all *all, t_int s_t, t_cord cross, t_cord ray);
 t_cord			crc(t_cord a, t_cord b, t_cord dot_a, t_cord dot_b);
 t_cord			rttz(t_cord vector, double angle, t_cord si_co);
 t_cord			net_point(t_cord ray, t_cord pos);
@@ -145,13 +146,21 @@ void			my_mlx_pixel_put(t_all *all, int x, int y, int color);
 void			init_img(t_all *all);
 void			init_texture(t_all *all);
 void			null_sprites(t_all *all);
-int				err(char *s);
 void			sort_sprite(t_all *all);
 void			print_sprite(t_all *all, double *zbuf);
 void			draw_sprite(t_all *all, t_sprite spr, double *zbuf);
 void			init_sprite(t_all *all, t_cord cross);
 void			check_display_resolution(t_all *all);
 void			screen_image(t_all *all);
+void			reset_textures(t_tx *tx, t_all *all);
+void			cr_pos(t_tx *tx, t_int dir, t_int pos);
+void			cr_plr(t_tx *tx, t_int i_j);
+void			parse_plr(t_tx *tx, t_all *all);
+void			mem_sprt(t_all *all, t_cord *art);
+char			**map_join(char ***map, char **line);
+void			get_map(t_tx *tx, char **line);
+void			parse_line(char *line, t_tx *tx);
+int				err(char *s);
 int				create_trgb(int t, int r, int g, int b);
 int				check_header(t_tx *tx);
 int				check_valid(t_tx tx);

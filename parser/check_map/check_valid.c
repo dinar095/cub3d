@@ -103,7 +103,7 @@ int			check_valid(t_tx tx)
 	return (flag);
 }
 
-int				ch_double_tx(char *tx)
+int			ch_double_tx(char *tx)
 {
 	if (tx == NULL)
 		return (1);

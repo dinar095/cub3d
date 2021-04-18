@@ -6,11 +6,27 @@
 /*   By: desausag <desausag@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 17:45:56 by desausag          #+#    #+#             */
-/*   Updated: 2021/04/17 19:39:22 by desausag         ###   ########.fr       */
+/*   Updated: 2021/04/18 08:38:56 by desausag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../game/ft_game.h"
+
+void	reset_textures(t_tx *tx, t_all *all)
+{
+	tx->width = -1;
+	tx->height = -1;
+	tx->no = NULL;
+	tx->so = NULL;
+	tx->we = NULL;
+	tx->ea = NULL;
+	tx->s = NULL;
+	tx->f = -1;
+	tx->c = -1;
+	tx->map = NULL;
+	tx->plr.dir.y = -2;
+	all->spr_co = 0;
+}
 
 void	get_num_fromline(t_tx *tx, char **line)
 {

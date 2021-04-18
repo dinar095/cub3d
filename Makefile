@@ -5,9 +5,16 @@ SRCS	= parser/check_map/check_valid.c \
 			parser/gnl/get_next_line_utils.c \
 			parser/srcs/ft_header.c \
 			parser/srcs/cheakers.c \
+			parser/srcs/get_player.c \
+			parser/srcs/get_map.c \
 			parser/parser.c \
 			main.c \
 			game/srcs.c \
+			game/ray_cast.c \
+			game/sprites.c \
+			game/screen.c \
+			game/img_f.c \
+			game/motion.c \
 
 OBJS		= $(patsubst %.c, %.o, $(SRCS))
 

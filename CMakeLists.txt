@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 99)
 
 file(GLOB LIBFILES libft/*.c)
 add_library(LibFT STATIC ${LIBFILES})
-add_executable(desausag parser/parser.c parser/srcs/ft_header.c parser/gnl/get_next_line.c parser/check_map/check_valid.c game/srcs.c game/ft_game.h main.c parser/srcs/cheakers.c)
+add_executable(desausag parser/parser.c parser/srcs/ft_header.c parser/gnl/get_next_line.c parser/check_map/check_valid.c game/srcs.c game/ft_game.h main.c parser/srcs/cheakers.c parser/srcs/get_player.c parser/srcs/get_map.c game/ray_cast.c game/sprites.c game/screen.c game/img_f.c game/motion.c)
 target_link_libraries(desausag LibFT)
 if (APPLE)
     target_link_libraries(desausag ${CMAKE_SOURCE_DIR}/libmlx_mac/libmlx.a)
